@@ -5,9 +5,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	//"io/ioutil"
 	"net/http"
-	//"log"
 	"strconv"
 	"strings"
 	"os"
@@ -34,19 +32,13 @@ type Comic struct {
 	Img string				`json:"img"`
 }
 
+// List of comics (JSON structures returned by XKCD)
 type Comics []Comic
 
-// List of entries matching a word
+// List of comics (identified by their number)
 type Integers []int
 
-// Word entry of the index
-type WordIndex struct {
-	Word string		`json:word`
-	Numbers Integers `json:numbers`
-}
-
-// Word entries (the content of the index file)
-//type WordIndexes []WordIndex
+// Word index (the content of the index file)
 type WordIndexes map[string]Integers
 
 // main is the entry point of the program
