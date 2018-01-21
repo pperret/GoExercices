@@ -12,35 +12,35 @@ import (
 )
 
 const (
-	omdbUrl string = "http://www.omdbapi.com"
+	omdbURL string = "http://www.omdbapi.com"
 )
 
-// JSON structure returned by OMDb (only some field are considered)
+// Movie is the JSON structure returned by OMDb (only some field are considered)
 type Movie struct {
-	Response string			`json:"Response"`
-	Title string			`json:"Title"`
-	Year string 			`json:"Year"`
-	Release string 			`json:"Release"`
-	Runtime string 			`json:"Runtime"`
-	Genre string 			`json:"Genre"`
-	Language string 		`json:"Language"`
-	Country string 			`json:"Country"`
-	Poster string 			`json:"Poster"`
-	Type string 			`json:"Type"`
+	Response string `json:"Response"`
+	Title    string `json:"Title"`
+	Year     string `json:"Year"`
+	Release  string `json:"Release"`
+	Runtime  string `json:"Runtime"`
+	Genre    string `json:"Genre"`
+	Language string `json:"Language"`
+	Country  string `json:"Country"`
+	Poster   string `json:"Poster"`
+	Type     string `json:"Type"`
 }
 
 // main is the entry point of the program
 func main() {
- 	// Check parameters
-	 if len(os.Args) != 3 {
+	// Check parameters
+	if len(os.Args) != 3 {
 		fmt.Fprintf(os.Stderr, "Usage: %s <apikey> <name>\n", os.Args[0])
 		os.Exit(1)
 	}
 
 	// Get movie data according to the search tag
-	movie,err := GetMovieData(os.Args[1], os.Args[2])
+	movie, err := GetMovieData(os.Args[1], os.Args[2])
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error %V\n", err)
+		fmt.Fprintf(os.Stderr, "Error %v\n", err)
 		os.Exit(2)
 	}
 
@@ -55,20 +55,20 @@ func main() {
 	name := movie.Title + ext
 	err = DownloadPoster(movie.Poster, name)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error %V\n", err)
+		fmt.Fprintf(os.Stderr, "Error %v\n", err)
 		os.Exit(4)
-	}	
+	}
 }
 
-// GetMoviedata gets data about a movie identified by its title
-func GetMovieData(apikey,name string)(*Movie, error) {
+// GetMovieData gets data about a movie identified by its title
+func GetMovieData(apikey, name string) (*Movie, error) {
 
 	// Build the request
 	values := make(url.Values)
 	values.Add("apikey", apikey)
 	values.Add("t", name)
-	urlRequest := omdbUrl + "/?" + values.Encode()
-	
+	urlRequest := omdbURL + "/?" + values.Encode()
+
 	// Send the request to the server
 	resp, err := http.Get(urlRequest)
 	if err != nil {
@@ -93,7 +93,7 @@ func GetMovieData(apikey,name string)(*Movie, error) {
 }
 
 // DownloadPoster downloads the poster of a movie
-func DownloadPoster(poster, name string) (error) {
+func DownloadPoster(poster, name string) error {
 
 	// Send the request to the server
 	resp, err := http.Get(poster)
@@ -105,7 +105,7 @@ func DownloadPoster(poster, name string) (error) {
 	defer resp.Body.Close()
 
 	// Check the status code
-	if resp.StatusCode != http.StatusOK {		
+	if resp.StatusCode != http.StatusOK {
 		return fmt.Errorf("Read query failed: %s", resp.Status)
 	}
 
@@ -128,7 +128,7 @@ func DownloadPoster(poster, name string) (error) {
 	}
 
 	// Don't forget to flush
-	err = writer.Flush();
+	err = writer.Flush()
 	if err != nil {
 		return err
 	}
