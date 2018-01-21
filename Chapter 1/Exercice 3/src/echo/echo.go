@@ -1,4 +1,4 @@
-// Several implementations of echo program
+// Package echo contains several implementations of echo program
 package echo
 
 import (
@@ -6,8 +6,8 @@ import (
 	"strings"
 )
 
-// Un-efficient version
-func Method1() (string){
+// Method1 is an un-efficient version
+func Method1() string {
 	s, sep := "", ""
 	for _, arg := range os.Args[1:] {
 		s += sep + arg
@@ -16,7 +16,7 @@ func Method1() (string){
 	return s
 }
 
-// Efficient version
-func Method2() (string) {
+// Method2 is an efficient version
+func Method2() string {
 	return strings.Join(os.Args[1:], " ")
 }

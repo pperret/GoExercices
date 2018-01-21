@@ -31,7 +31,7 @@ func unique(s []byte) []byte {
 			if space == false {
 				s[to] = ' '
 				to++
-			} 
+			}
 			from += l
 			space = true
 		} else {

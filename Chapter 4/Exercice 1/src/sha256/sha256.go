@@ -2,14 +2,14 @@
 package main
 
 import (
-	"fmt"
 	"crypto/sha256"
-	)
+	"fmt"
+)
 
 func different(c1, c2 [32]uint8) int {
 	n := 0
 	for i := range c1 {
-		for b := c1[i] ^ c2[i] ; b != 0 ; b &= (b - 1) {
+		for b := c1[i] ^ c2[i]; b != 0; b &= (b - 1) {
 			n++
 		}
 	}
@@ -20,5 +20,5 @@ func main() {
 	c1 := sha256.Sum256([]byte("x"))
 	c2 := sha256.Sum256([]byte("X"))
 	d := different(c1, c2)
-	fmt.Printf("%x\n%x\n%d\n", c1, c2, d)	
+	fmt.Printf("%x\n%x\n%d\n", c1, c2, d)
 }

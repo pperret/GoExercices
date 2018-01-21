@@ -9,10 +9,10 @@ import (
 func main() {
 	str1 := "Bonjour à toutes les bêtes"
 	tab1 := []byte(str1)
-	
+
 	tab2 := reverseString(tab1)
 	str2 := string(tab2)
-	
+
 	fmt.Println(str1)
 	fmt.Println(str2)
 }
@@ -25,13 +25,13 @@ func reverseByte(b []byte) {
 }
 
 // reverse a UTF8 string
-func reverseString(str []byte) []byte{
+func reverseString(str []byte) []byte {
 
 	for i := 0; i < len(str); {
 		_, size := utf8.DecodeRune(str[i:])
 		reverseByte(str[i : i+size])
 		i += size
 	}
-	reverseByte(str)	
+	reverseByte(str)
 	return str
 }

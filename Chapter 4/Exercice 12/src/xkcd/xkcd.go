@@ -6,45 +6,45 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
-	"os"
 )
 
 const (
-	xkcdUrl string = "http://www.xkcd.com"
-	xkcdJson string = "info.0.json"
+	xkcdURL   string = "http://www.xkcd.com"
+	xkcdJSON  string = "info.0.json"
 	fileCache string = "xkcd.db"
 )
 
-// JSON structure returned by XKSD
+// Comic is the JSON structure returned by XKSD
 type Comic struct {
-	Number int 				`json:"num"`
-	Title string			`json:"title"`
-	SafeTitle string		`json:"safe_title"`
-	Year string				`json:"year"`
-	Month string			`json:"month"`
-	Day string				`json:"day"`
-	Link string				`json:"link"`
-	news string				`json:"news"`
-	Transcript string		`json:"transcript"`
-	Alt string				`json:"alt"`
-	Img string				`json:"img"`
+	Number     int    `json:"num"`
+	Title      string `json:"title"`
+	SafeTitle  string `json:"safe_title"`
+	Year       string `json:"year"`
+	Month      string `json:"month"`
+	Day        string `json:"day"`
+	Link       string `json:"link"`
+	News       string `json:"news"`
+	Transcript string `json:"transcript"`
+	Alt        string `json:"alt"`
+	Img        string `json:"img"`
 }
 
-// List of comics (JSON structures returned by XKCD)
+// Comics is the list of comics (JSON structures returned by XKCD)
 type Comics []Comic
 
-// List of comics (identified by their number)
+// Integers is the list of comics (identified by their number)
 type Integers []int
 
-// Word index (the content of the index file)
+// WordIndexes is the word indexes (the content of the index file)
 type WordIndexes map[string]Integers
 
 // main is the entry point of the program
 func main() {
- 	// Check parameters
-	 if len(os.Args) != 2 {
+	// Check parameters
+	if len(os.Args) != 2 {
 		fmt.Fprintf(os.Stderr, "Usage: %s <tag>\n", os.Args[0])
 		os.Exit(1)
 	}
@@ -52,7 +52,7 @@ func main() {
 	// Load the index file (or create it if it does not already exist)
 	indexes, err := loadIndexFile()
 	if err != nil {
-		fmt.Printf("Error: %V\n", err)
+		fmt.Printf("Error: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -63,7 +63,7 @@ func main() {
 		for _, number := range numbers {
 			comic, err := downloadComic(number)
 			if err != nil {
-				fmt.Printf("Error: %V\n", err)
+				fmt.Printf("Error: %v\n", err)
 				os.Exit(1)
 			}
 			fmt.Printf("%s\n", buildURL(comic.Number))
@@ -143,7 +143,7 @@ func writeIndexFile(comics *Comics) (*WordIndexes, error) {
 		}
 
 		// Loop on comic words
-		for _,word := range *words {
+		for _, word := range *words {
 			// Append each word to the map
 			indexes[word] = append(indexes[word], comic.Number)
 		}
@@ -165,7 +165,7 @@ func writeIndexFile(comics *Comics) (*WordIndexes, error) {
 	}
 
 	// Don't forget to flush
-	writer.Flush();
+	writer.Flush()
 
 	file.Close()
 	return &indexes, nil
@@ -186,7 +186,7 @@ func ScanWords(text string) (*[]string, error) {
 		word := scanner.Text()
 		// The word is appended to the list if it is not already present
 		found := false
-		for _,w := range words {
+		for _, w := range words {
 			if w == word {
 				found = true
 				break
@@ -208,14 +208,14 @@ func ScanWords(text string) (*[]string, error) {
 func downloadComics() (*Comics, error) {
 
 	// Get the last entry to determine the max number of the comics
-	lastEntry, err := downloadEntry(xkcdUrl + "/" + xkcdJson)
+	lastEntry, err := downloadEntry(xkcdURL + "/" + xkcdJSON)
 	if err != nil {
 		return nil, err
 	}
 
 	// Read the entries list
 	var comics Comics
-	for i:=1 ; i<=lastEntry.Number ; i++ {
+	for i := 1; i <= lastEntry.Number; i++ {
 		// Download one comic entry (if the entry does not exist, its number will be 0)
 		entry, err := downloadComic(i)
 		if err != nil {
@@ -238,8 +238,8 @@ func downloadComic(number int) (*Comic, error) {
 }
 
 // Build the comic's URL from its number
-func buildURL(number int) (string) {
-	return xkcdUrl + "/" + strconv.Itoa(number) + "/"+ xkcdJson
+func buildURL(number int) string {
+	return xkcdURL + "/" + strconv.Itoa(number) + "/" + xkcdJSON
 }
 
 // downloadEntry downloads one comic entry from the server using its URL

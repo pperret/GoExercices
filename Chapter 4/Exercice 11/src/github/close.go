@@ -12,8 +12,8 @@ import (
 func CloseIssue(username, passwd, owner, repo, issueNumber string) (*Issue, error) {
 
 	// Create the URL
-	patchUrl := strings.Join([]string{"https://api.github.com/repos", owner, repo, "issues", issueNumber}, "/")
-	
+	patchURL := strings.Join([]string{"https://api.github.com/repos", owner, repo, "issues", issueNumber}, "/")
+
 	// Build the update request
 	var issue Issue
 	issue.State = "closed"
@@ -26,7 +26,7 @@ func CloseIssue(username, passwd, owner, repo, issueNumber string) (*Issue, erro
 
 	// Build the HTTP request
 	client := &http.Client{}
-	httpRequest, err := http.NewRequest("PATCH", patchUrl, &requestBuffer)
+	httpRequest, err := http.NewRequest("PATCH", patchURL, &requestBuffer)
 	if err != nil {
 		return nil, err
 	}
@@ -38,9 +38,9 @@ func CloseIssue(username, passwd, owner, repo, issueNumber string) (*Issue, erro
 	httpRequest.Header.Add("Content-Type", "application/json")
 
 	// Send the request to github
-    resp, err := client.Do(httpRequest)
-    if err != nil {
-        return nil, err
+	resp, err := client.Do(httpRequest)
+	if err != nil {
+		return nil, err
 	}
 
 	// We must close resp.Body on all execution paths.
@@ -48,14 +48,14 @@ func CloseIssue(username, passwd, owner, repo, issueNumber string) (*Issue, erro
 		resp.Body.Close()
 		return nil, fmt.Errorf("Close query failed: %s", resp.Status)
 	}
-	
+
 	// Decode the github response
 	var result Issue
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		resp.Body.Close()
 		return nil, err
 	}
-	
+
 	resp.Body.Close()
-	return &result, nil   
+	return &result, nil
 }

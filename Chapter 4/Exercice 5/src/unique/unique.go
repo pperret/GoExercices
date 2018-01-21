@@ -17,7 +17,7 @@ func main() {
 // Purge adjacent strings
 func adjacent(s []string) []string {
 	i := 0
-	for _,str := range s {
+	for _, str := range s {
 		if i == 0 || str != s[i-1] {
 			s[i] = str
 			i++

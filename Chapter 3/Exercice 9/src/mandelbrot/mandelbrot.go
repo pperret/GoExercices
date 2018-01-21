@@ -9,7 +9,7 @@ import (
 	"math/cmplx"
 	"net/http"
 	"strconv"
-	)
+)
 
 func main() {
 	http.HandleFunc("/", handler)
@@ -21,7 +21,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	const (
 		width, height = 1024, 1024
 	)
-	
+
 	// Parse request parameters
 	if err := r.ParseForm(); err != nil {
 		log.Println(err)
@@ -47,7 +47,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 			ypos = yy
 		}
 	}
-	
+
 	// Get zoom
 	zoom := 100.0 // Default value
 	zt := r.Form["zoom"]
@@ -57,17 +57,17 @@ func handler(w http.ResponseWriter, r *http.Request) {
 			zoom = zz
 		}
 	}
-	
-	xmin := float64(xpos) - (2*100/zoom)
-	xmax := float64(xpos) + (2*100/zoom)
-	ymin := float64(ypos) - (2*100/zoom)
-	ymax := float64(ypos) + (2*100/zoom)
-	
+
+	xmin := float64(xpos) - (2 * 100 / zoom)
+	xmax := float64(xpos) + (2 * 100 / zoom)
+	ymin := float64(ypos) - (2 * 100 / zoom)
+	ymax := float64(ypos) + (2 * 100 / zoom)
+
 	img := image.NewRGBA(image.Rect(0, 0, width, height))
 	for py := 0; py < height; py++ {
-		y := float64(py) / height * (ymax-ymin) + ymin
+		y := float64(py)/height*(ymax-ymin) + ymin
 		for px := 0; px < width; px++ {
-			x := float64(px) / width * (xmax-xmin) + xmin
+			x := float64(px)/width*(xmax-xmin) + xmin
 			z := complex(x, y)
 			// Image point (px, py) represents complex value z.
 			img.Set(px, py, mandelbrot(z))
@@ -82,11 +82,11 @@ func mandelbrot(z complex128) color.Color {
 	const contrast = 15
 	var v complex128
 	for n := uint8(0); n < iterations; n++ {
-		v = v * v + z
+		v = v*v + z
 		if cmplx.Abs(v) > 2 {
-			var r uint8 = contrast*n
-			var b uint8 = 255-contrast*n
-			var g uint8 = 255-contrast* (n-10)*(n-10)
+			r := contrast * n
+			b := 255 - contrast*n
+			g := 255 - contrast*(n-10)*(n-10)
 			return color.RGBA{r, g, b, 255}
 		}
 	}

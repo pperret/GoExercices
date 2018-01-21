@@ -8,7 +8,7 @@
 // 	123
 // 	1,234
 // 	1,234,567,890
-//
+
 package main
 
 import (
@@ -39,28 +39,28 @@ func comma(s string) string {
 
 	// Start position of digits
 	pos := 0
-	if strings.HasPrefix(s, "-") == true || strings.HasPrefix(s, "+") == true{
+	if strings.HasPrefix(s, "-") == true || strings.HasPrefix(s, "+") == true {
 		pos = 1
 		p--
-	} 
+	}
 
 	// If no comma is to be appended
-	if p <=  3 {
+	if p <= 3 {
 		return s
 	}
 
 	// Compute first length
-	m := p%3
-	if m == 0 { 
+	m := p % 3
+	if m == 0 {
 		m = 3
 	}
 	m += pos // Do't forget the sign
 	buf.WriteString(s[:m])
 
 	// Next parts separated by commas
-	for ; m<p ; m+=3 {
+	for ; m < p; m += 3 {
 		buf.WriteString(",")
-		buf.WriteString(s[m:m+3])
+		buf.WriteString(s[m : m+3])
 	}
 
 	// Append the decimal part (no comma?)

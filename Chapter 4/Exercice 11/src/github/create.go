@@ -11,8 +11,8 @@ import (
 // CreateIssue creates a new issue in the repository
 func CreateIssue(username, passwd, owner, repo, title string) (*Issue, error) {
 	// Create the URL
-	postUrl := strings.Join([]string{"https://api.github.com/repos", owner, repo, "issues"}, "/")
-	
+	postURL := strings.Join([]string{"https://api.github.com/repos", owner, repo, "issues"}, "/")
+
 	// Get the body using the prefered editor
 	body, err := getText()
 	if err != nil {
@@ -33,7 +33,7 @@ func CreateIssue(username, passwd, owner, repo, title string) (*Issue, error) {
 
 	// Build the HTTP request
 	client := &http.Client{}
-	httpRequest, err := http.NewRequest("POST", postUrl, &request)
+	httpRequest, err := http.NewRequest("POST", postURL, &request)
 	if err != nil {
 		return nil, err
 	}
@@ -45,9 +45,9 @@ func CreateIssue(username, passwd, owner, repo, title string) (*Issue, error) {
 	httpRequest.Header.Add("Content-Type", "application/json")
 
 	// Send the request to github
-    resp, err := client.Do(httpRequest)
-    if err != nil {
-        return nil, err
+	resp, err := client.Do(httpRequest)
+	if err != nil {
+		return nil, err
 	}
 
 	// We must close resp.Body on all execution paths.
@@ -55,15 +55,15 @@ func CreateIssue(username, passwd, owner, repo, title string) (*Issue, error) {
 		resp.Body.Close()
 		return nil, fmt.Errorf("Create query failed: %s", resp.Status)
 	}
-	
+
 	// Decode the response
 	var result Issue
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		resp.Body.Close()
 		return nil, err
 	}
-	
+
 	resp.Body.Close()
 	return &result, nil
-    
+
 }

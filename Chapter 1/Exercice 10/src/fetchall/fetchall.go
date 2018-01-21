@@ -30,7 +30,7 @@ func main() {
 }
 
 // Fetch one URL
-func fetch(url string, ch chan <-string) {
+func fetch(url string, ch chan<- string) {
 	start := time.Now()
 
 	// Access to the URL

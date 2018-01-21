@@ -6,10 +6,10 @@ import (
 )
 
 func main() {
-	tab :=[9]int{0, 1, 2, 3, 4, 5, 6, 7, 8}
-	
+	tab := [9]int{0, 1, 2, 3, 4, 5, 6, 7, 8}
+
 	reverse(&tab)
-	
+
 	fmt.Println(tab)
 }
 

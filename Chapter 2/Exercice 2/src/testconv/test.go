@@ -2,14 +2,14 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"lenconv"
+	"os"
 	"strconv"
 	"tempconv"
 	"weightconv"
 )
 
-func conv(t float64){
+func conv(t float64) {
 	f := tempconv.Fahrenheit(t)
 	c := tempconv.Celsius(t)
 	fmt.Printf("%s = %s, %s = %s\n", f, tempconv.FToC(f), c, tempconv.CToF(c))

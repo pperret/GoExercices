@@ -11,4 +11,3 @@ func main() {
 		fmt.Println(i+1, arg)
 	}
 }
-

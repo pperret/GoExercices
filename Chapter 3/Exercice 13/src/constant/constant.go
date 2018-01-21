@@ -4,6 +4,7 @@ import (
 	"fmt"
 )
 
+// Number of bytes per unit
 const (
 	KB = 1000
 	MB = 1000 * KB
@@ -17,7 +18,7 @@ const (
 
 func main() {
 	fmt.Printf("KB=%T, %[1]v\n", KB)
-	
-	i := YB/1000000000
+
+	i := YB / 1000000000
 	fmt.Printf("YB=%T, %[1]v\n", i)
 }

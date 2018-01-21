@@ -35,4 +35,3 @@ func SearchIssues(terms []string) (*IssuesSearchResult, error) {
 	resp.Body.Close()
 	return &result, nil
 }
-

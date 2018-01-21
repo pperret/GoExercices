@@ -33,7 +33,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 			if c == "" {
 				log.Println("Cycles parameter is empty")
 			} else {
-				cs,errc := strconv.ParseFloat(c, 10)
+				cs, errc := strconv.ParseFloat(c, 10)
 				if errc != nil {
 					log.Println("Invalid cycles parameter")
 				} else {
@@ -56,10 +56,10 @@ const (
 // Build Lissajous figure
 func lissajous(out io.Writer, cycles float64) {
 	const (
-		res = 0.001 // angular resolution
-		size = 100 // image canvas covers [size..+size]
-		nframes = 64 // number of animation frames
-		delay =8 // delay between frames in 10ms units
+		res     = 0.001 // angular resolution
+		size    = 100   // image canvas covers [size..+size]
+		nframes = 64    // number of animation frames
+		delay   = 8     // delay between frames in 10ms units
 	)
 	freq := rand.Float64() * 3.0 // relative frequency of y oscillator
 	anim := gif.GIF{LoopCount: nframes}

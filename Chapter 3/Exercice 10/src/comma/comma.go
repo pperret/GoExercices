@@ -8,7 +8,7 @@
 // 	123
 // 	1,234
 // 	1,234,567,890
-//
+
 package main
 
 import (
@@ -27,17 +27,17 @@ func main() {
 func comma(s string) string {
 	var buf bytes.Buffer
 	n := len(s)
-	if n <=  3 {
+	if n <= 3 {
 		return s
 	}
-	m := n%3
-	if m == 0 { 
+	m := n % 3
+	if m == 0 {
 		m = 3
 	}
 	buf.WriteString(s[:m])
-	for ; m<n ; m+=3 {
+	for ; m < n; m += 3 {
 		buf.WriteString(",")
-		buf.WriteString(s[m:m+3])
+		buf.WriteString(s[m : m+3])
 	}
 	return buf.String()
 }

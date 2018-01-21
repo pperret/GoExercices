@@ -11,20 +11,20 @@ import (
 
 func main() {
 	const (
-		xmin, ymin, xmax, ymax = -2, -2, +2, +2	
-		width, height = 1024, 1024	
+		xmin, ymin, xmax, ymax = -2, -2, +2, +2
+		width, height          = 1024, 1024
 	)
 	img := image.NewRGBA(image.Rect(0, 0, width, height))
 	for py := 0; py < height; py++ {
-		y := float64(py) / height * (ymax-ymin) + ymin
+		y := float64(py)/height*(ymax-ymin) + ymin
 		for px := 0; px < width; px++ {
-			x := float64(px) / width * (xmax-xmin) + xmin
+			x := float64(px)/width*(xmax-xmin) + xmin
 			z := complex(x, y)
 			// Image point (px, py) represents complex value z.
 			img.Set(px, py, newton(z))
 		}
 	}
-	
+
 	png.Encode(os.Stdout, img) // NOTE: ignoring errors
 }
 
@@ -41,20 +41,20 @@ func newton(z complex128) color.Color {
 	var n uint8
 	for n = 0; n < iterations; n++ {
 		z = z - (z*z*z*z-1.0)/(4*z*z*z)
-		if (cmplx.Abs(z*z*z*z-1.0) < eps) {
+		if cmplx.Abs(z*z*z*z-1.0) < eps {
 			break
 		}
 	}
 
-	if n<iterations {
-		if (cmplx.Abs(z-r1) < eps) {
-			return color.RGBA{0, 0, 255-n*contrast, 255}
-		} else if (cmplx.Abs(z-r2) < eps) {
-			return color.RGBA{0, 255-n*contrast, 0, 255}
-		} else if (cmplx.Abs(z-r3) < eps) {
-			return color.RGBA{255-n*contrast, 0, 0, 255}
-		} else if (cmplx.Abs(z-r4) < eps) {
-			return color.Gray{255-n*contrast}
+	if n < iterations {
+		if cmplx.Abs(z-r1) < eps {
+			return color.RGBA{0, 0, 255 - n*contrast, 255}
+		} else if cmplx.Abs(z-r2) < eps {
+			return color.RGBA{0, 255 - n*contrast, 0, 255}
+		} else if cmplx.Abs(z-r3) < eps {
+			return color.RGBA{255 - n*contrast, 0, 0, 255}
+		} else if cmplx.Abs(z-r4) < eps {
+			return color.Gray{255 - n*contrast}
 		}
 	}
 	return color.Black

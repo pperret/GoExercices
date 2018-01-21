@@ -11,8 +11,8 @@ import (
 // AddComment add a comment to an existing issue
 func AddComment(username, passwd, owner, repo, issueNumber string) (*Issue, error) {
 	// Create the URL
-	postUrl := strings.Join([]string{"https://api.github.com/repos", owner, repo, "issues", issueNumber, "comments"}, "/")
-	
+	postURL := strings.Join([]string{"https://api.github.com/repos", owner, repo, "issues", issueNumber, "comments"}, "/")
+
 	// Get the comment using the prefered editor
 	text, err := getText()
 	if err != nil {
@@ -31,7 +31,7 @@ func AddComment(username, passwd, owner, repo, issueNumber string) (*Issue, erro
 
 	// Build the HTTP request
 	client := &http.Client{}
-	httpRequest, err := http.NewRequest("POST", postUrl, &request)
+	httpRequest, err := http.NewRequest("POST", postURL, &request)
 	if err != nil {
 		return nil, err
 	}
@@ -43,9 +43,9 @@ func AddComment(username, passwd, owner, repo, issueNumber string) (*Issue, erro
 	httpRequest.Header.Add("Content-Type", "application/json")
 
 	// Send the request to github
-    resp, err := client.Do(httpRequest)
-    if err != nil {
-        return nil, err
+	resp, err := client.Do(httpRequest)
+	if err != nil {
+		return nil, err
 	}
 
 	// We must close resp.Body on all execution paths.
@@ -53,15 +53,15 @@ func AddComment(username, passwd, owner, repo, issueNumber string) (*Issue, erro
 		resp.Body.Close()
 		return nil, fmt.Errorf("Create query failed: %s", resp.Status)
 	}
-	
+
 	// Decode the response
 	var result Issue
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		resp.Body.Close()
 		return nil, err
 	}
-	
+
 	resp.Body.Close()
 	return &result, nil
-    
+
 }

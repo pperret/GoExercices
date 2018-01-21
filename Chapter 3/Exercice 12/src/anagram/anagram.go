@@ -29,8 +29,8 @@ func anagram(s1, s2 string) bool {
 
 func order(s string) string {
 	t := []rune(s)
-	for j:=0 ; j<len(t)-1 ; j++ {
-		for i:=j+1 ; i<len(t) ; i++ {
+	for j := 0; j < len(t)-1; j++ {
+		for i := j + 1; i < len(t); i++ {
 			if t[j] > t[i] {
 				t[j], t[i] = t[i], t[j]
 			}

@@ -7,29 +7,28 @@ import (
 
 // Benchmark for complex64 version
 func BenchmarkComplex64(b *testing.B) {
-	for i:=0 ; i<b.N ; i++ {
-		MandelbrotComplex64()
+	for i := 0; i < b.N; i++ {
+		Complex64Mandelbrot()
 	}
 }
 
-
 // Benchmark for complex128 version
 func BenchmarkComplex128(b *testing.B) {
-	for i:=0 ; i<b.N ; i++ {
-		MandelbrotComplex128()
+	for i := 0; i < b.N; i++ {
+		Complex128Mandelbrot()
 	}
 }
 
 // Benchmark for big float version
 func BenchmarkBigFloat(b *testing.B) {
-	for i:=0 ; i<b.N ; i++ {
-		MandelbrotBigFloat()
+	for i := 0; i < b.N; i++ {
+		BigFloatMandelbrot()
 	}
 }
 
 // Benchmark for big rat version
 func BenchmarkBigRat(b *testing.B) {
-	for i:=0 ; i<b.N ; i++ {
-		MandelbrotBigRat()
+	for i := 0; i < b.N; i++ {
+		BigRatMandelbrot()
 	}
 }
