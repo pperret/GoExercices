@@ -15,3 +15,4 @@
 
 # Batch files
 *.bat
+.vscode/launch.json
