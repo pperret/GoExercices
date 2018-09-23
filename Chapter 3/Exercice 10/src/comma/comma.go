@@ -27,9 +27,6 @@ func main() {
 func comma(s string) string {
 	var buf bytes.Buffer
 	n := len(s)
-	if n <= 3 {
-		return s
-	}
 	m := n % 3
 	if m == 0 {
 		m = 3
