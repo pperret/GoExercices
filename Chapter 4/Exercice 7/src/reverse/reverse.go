@@ -14,6 +14,8 @@ func main() {
 	str2 := string(tab2)
 
 	fmt.Println(str1)
+	fmt.Printf("% x\n", tab1)
+	fmt.Printf("% x\n", tab2)
 	fmt.Println(str2)
 }
 
