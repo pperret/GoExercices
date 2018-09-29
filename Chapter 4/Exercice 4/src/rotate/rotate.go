@@ -1,4 +1,4 @@
-// Rotate an slice of integer
+// Rotate a slice of integers
 package main
 
 import (
@@ -15,10 +15,9 @@ func main() {
 
 // Rotate a slice of ints in place
 func rotate(s []int, p int) []int {
-	t := make([]int, len(s))
-	for i := range s {
-		t[p] = i
-		p = (p + 1) % len(s)
-	}
-	return t
+	t := make([]int, p)
+	copy(t, s[0:p])
+	copy(s, s[p:])
+	copy(s[len(s)-p:], t)
+	return s
 }
