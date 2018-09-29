@@ -1,4 +1,4 @@
-// Remove dupplicate adjacent strings in a slice
+// Remove duplicate adjacent spaces in a byte string (UTF-8 encoded)
 package main
 
 import (
@@ -32,16 +32,13 @@ func unique(s []byte) []byte {
 				s[to] = ' '
 				to++
 			}
-			from += l
 			space = true
 		} else {
-			for k := 0; k < l; k++ {
-				s[to+k] = s[from+k]
-			}
-			from += l
+			copy(s[to:], s[from:from+l])
 			to += l
 			space = false
 		}
+		from += l
 	}
 	return s[:to]
 }
