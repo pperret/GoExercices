@@ -20,16 +20,16 @@ const (
 // Comic is the JSON structure returned by XKSD
 type Comic struct {
 	Number     int    `json:"num"`
-	Title      string `json:"title"`
+	Title      string // `json:"title"`
 	SafeTitle  string `json:"safe_title"`
-	Year       string `json:"year"`
-	Month      string `json:"month"`
-	Day        string `json:"day"`
-	Link       string `json:"link"`
-	News       string `json:"news"`
-	Transcript string `json:"transcript"`
-	Alt        string `json:"alt"`
-	Img        string `json:"img"`
+	Year       string // `json:"year"`
+	Month      string // `json:"month"`
+	Day        string // `json:"day"`
+	Link       string // `json:"link"`
+	News       string // `json:"news"`
+	Transcript string // `json:"transcript"`
+	Alt        string // `json:"alt"`
+	Img        string // `json:"img"`
 }
 
 // Comics is the list of comics (JSON structures returned by XKCD)
