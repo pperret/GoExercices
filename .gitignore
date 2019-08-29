@@ -19,3 +19,6 @@
 # Visual Studio files
 .vscode/
 *.code-workspace
+
+# MacOS file
+.DS_Store
