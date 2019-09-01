@@ -8,13 +8,11 @@ import (
 )
 
 func main() {
-	// Number of line occurrences
-	counts := make(map[string]int)
 	// File names (slice of file names) for each line
-	names := make(map[string][]string)
+	counts := make(map[string][]string)
 	files := os.Args[1:]
 	if len(files) == 0 {
-		countLines(os.Stdin, "-", counts, names)
+		countLines(os.Stdin, "-", counts)
 	} else {
 		for _, arg := range files {
 			f, err := os.Open(arg)
@@ -22,15 +20,15 @@ func main() {
 				fmt.Fprintf(os.Stderr, "dup2: %v\n", err)
 				continue
 			}
-			countLines(f, arg, counts, names)
+			countLines(f, arg, counts)
 			f.Close()
 		}
 	}
-	for line, n := range counts {
-		if n > 1 {
-			fmt.Printf("%d\t%s\t", n, line)
+	for line, names := range counts {
+		if len(names) > 1 {
+			fmt.Printf("%d\t%s\t", len(names), line)
 			sep := ""
-			for _, name := range names[line] {
+			for _, name := range names {
 				fmt.Printf("%s%s", sep, name)
 				sep = " "
 			}
@@ -40,15 +38,14 @@ func main() {
 }
 
 // Analyse one file
-func countLines(f *os.File, name string, counts map[string]int, names map[string][]string) {
+func countLines(f *os.File, name string, counts map[string][]string) {
 	already := make(map[string]bool)
 	input := bufio.NewScanner(f)
 	for input.Scan() {
 		line := input.Text()
-		counts[line]++
 		if already[line] == false {
 			already[line] = true
-			names[line] = append(names[line], name)
+			counts[line] = append(counts[line], name)
 		}
 	}
 }
