@@ -1,4 +1,4 @@
-// Display each argument including the program name
+// Displays each argument including the program name
 package main
 
 import (
