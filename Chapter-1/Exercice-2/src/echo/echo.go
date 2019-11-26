@@ -1,4 +1,4 @@
-// Diplay each command line argument with the index
+// Displays each argument of the command line with its index
 package main
 
 import (
