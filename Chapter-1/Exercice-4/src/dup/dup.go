@@ -1,4 +1,4 @@
-// Print the names of all files in which each duplicated line occurs.
+// Prints the names of files in which each duplicated line occurs.
 package main
 
 import (
@@ -30,7 +30,7 @@ func main() {
 			sep := ""
 			for _, name := range names {
 				fmt.Printf("%s%s", sep, name)
-				sep = " "
+				sep = ", "
 			}
 			fmt.Println()
 		}
