@@ -22,6 +22,3 @@
 
 # MacOS file
 .DS_Store
-
-# GO module files
-go.mod
