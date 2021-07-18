@@ -1,6 +1,12 @@
+MODULE_NAME=dummy.com/C4E9
 
-build:
-	GOPATH="${PWD}" go install wordfreq
+build: src/go.mod
+	cd src ; go mod tidy
+	cd src ; GOPATH="${PWD}" go install $(MODULE_NAME)/wordfreq
+
+src/go.mod:
+	cd src ; go mod init $(MODULE_NAME)
 
 clean:
 	rm -rf bin
+	rm -f src/go.mod

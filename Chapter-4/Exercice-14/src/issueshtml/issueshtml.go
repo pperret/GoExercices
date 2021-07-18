@@ -3,7 +3,6 @@ package main
 
 import (
 	"fmt"
-	"github"
 	"html/template"
 	"io"
 	"log"
@@ -11,6 +10,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"dummy.com/C4E14/github"
 )
 
 // issuesList is the global list of issues returned from github

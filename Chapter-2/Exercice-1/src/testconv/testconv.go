@@ -3,7 +3,8 @@ package main
 
 import (
 	"fmt"
-	"tempconv"
+
+	"dummy.com/C2E1/tempconv"
 )
 
 func main() {

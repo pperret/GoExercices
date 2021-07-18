@@ -3,9 +3,10 @@ package main
 
 import (
 	"fmt"
-	"github"
 	"log"
 	"os"
+
+	"dummy.com/C4E11/github"
 )
 
 // main is the entry point of the program

@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	"lenconv"
 	"os"
 	"strconv"
-	"tempconv"
-	"weightconv"
+
+	"dummy.com/C2E2/lenconv"
+	"dummy.com/C2E2/tempconv"
+	"dummy.com/C2E2/weightconv"
 )
 
 func conv(t float64) {

@@ -3,10 +3,11 @@ package main
 
 import (
 	"fmt"
-	"github"
 	"log"
 	"os"
 	"time"
+
+	"dummy.com/C4E10/github"
 )
 
 func main() {

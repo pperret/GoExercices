@@ -1,9 +1,13 @@
+MODULE_NAME=dummy.com/C5E4
 
-build:
-	GOPATH="${PWD}" go get golang.org/x/net/html
-	GOPATH="${PWD}" go install findlinks
+build: src/go.mod
+	cd src ; go mod tidy
+	cd src ; GOPATH="${PWD}" go install $(MODULE_NAME)/findlinks
+
+src/go.mod:
+	cd src ; go mod init $(MODULE_NAME)
 
 clean:
 	rm -rf bin
-	rm -rf pkg
-	rm -rf src/golang.org
+	chmod -R u+w pkg ; rm -rf pkg
+	rm -f src/go.mod src/go.sum
