@@ -2,7 +2,7 @@ MODULE_NAME=dummy.com/C1E3
 
 test: src/go.mod
 	cd src ; go mod tidy
-	cd src ; GOPATH="${PWD}" go test -bench=. $(MODULE_NAME)/echo -args tutu tata tit
+	cd src ; GOPATH="${PWD}" go test -bench=. $(MODULE_NAME)/echo -args tutu tata titi
 
 src/go.mod:
 	cd src ; go mod init $(MODULE_NAME)
