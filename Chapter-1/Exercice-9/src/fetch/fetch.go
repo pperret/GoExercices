@@ -16,7 +16,7 @@ func main() {
 			os.Exit(1)
 		}
 
-		fmt.Printf("HTTP result:%v\n", resp.Status)
+		fmt.Printf("HTTP result: %v\n", resp.Status)
 
 		b, err := ioutil.ReadAll(resp.Body)
 		resp.Body.Close()
