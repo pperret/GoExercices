@@ -22,3 +22,7 @@
 
 # MacOS file
 .DS_Store
+
+# GO output folders
+bin/
+pkg/
