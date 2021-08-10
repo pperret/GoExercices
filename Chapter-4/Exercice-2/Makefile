@@ -1,12 +1,16 @@
 MODULE_NAME=dummy.com/C4E2
 
-build: src/go.mod
-	cd src ; go mod tidy
-	cd src ; GOPATH="${PWD}" go install $(MODULE_NAME)/digest
+ifndef GOPATH
+$(error GOPATH is not set)
+endif
 
-src/go.mod:
-	cd src ; go mod init $(MODULE_NAME)
+build: go.mod
+	go mod tidy
+	go install $(MODULE_NAME)/digest
+
+go.mod:
+	go mod init $(MODULE_NAME)
 
 clean:
-	rm -rf bin
-	rm -f src/go.mod
+	rm -f ${GOPATH}/bin/digest
+	rm -f go.mod

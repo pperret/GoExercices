@@ -1,14 +1,18 @@
 
 MODULE_NAME=dummy.com/C1E12
 
-build: src/go.mod
-	cd src ; go mod tidy
-	cd src ; GOPATH="${PWD}" go install $(MODULE_NAME)/server
+ifndef GOPATH
+$(error GOPATH is not set)
+endif
 
-src/go.mod:
-	cd src ; go mod init $(MODULE_NAME)
+build: go.mod
+	go mod tidy
+	go install $(MODULE_NAME)/server
+
+go.mod:
+	go mod init $(MODULE_NAME)
 
 clean:
-	rm -rf bin
-	rm -f src/go.mod
+	rm -f ${GOPATH}/bin/server
+	rm -f go.mod
  

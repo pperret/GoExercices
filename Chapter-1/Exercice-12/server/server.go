@@ -33,12 +33,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
 			if c == "" {
 				log.Println("Cycles parameter is empty")
 			} else {
-				cs, errc := strconv.ParseFloat(c, 10)
+				cs, errc := strconv.Atoi(c)
 				if errc != nil {
 					log.Println("Invalid cycles parameter")
 				} else {
-					cycles = cs
-					log.Println("cycles=", cycles)
+					cycles = float64(cs)
+					log.Printf("cycles=%f", cycles)
 				}
 			}
 		}

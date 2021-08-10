@@ -1,18 +1,22 @@
 MODULE_NAME=dummy.com/C5E7
 
-build: src/go.mod
-	cd src ; go mod tidy
-	cd src ; GOPATH="${PWD}" go install $(MODULE_NAME)/prettyprint
+ifndef GOPATH
+$(error GOPATH is not set)
+endif
 
-test: src/go.mod
-	cd src ; go mod tidy
-	cd src ; GOPATH="${PWD}" go test -v $(MODULE_NAME)/prettyprint
+build: go.mod
+	go mod tidy
+	go install $(MODULE_NAME)/prettyprint
 
-src/go.mod:
-	cd src ; go mod init $(MODULE_NAME)
+test: go.mod
+	go mod tidy
+	go test -v $(MODULE_NAME)/prettyprint
+
+go.mod:
+	go mod init $(MODULE_NAME)
 
 clean:
-	rm -rf bin
-	chmod -R u+w pkg ; rm -rf pkg
-	rm -f src/go.mod src/go.sum
+	rm -f ${GOPATH}/bin/prettyprint
+	#chmod -R u+w pkg ; rm -rf pkg
+	rm -f go.mod go.sum
 

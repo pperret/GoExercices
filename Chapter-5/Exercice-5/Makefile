@@ -1,13 +1,17 @@
 MODULE_NAME=dummy.com/C5E5
 
-build: src/go.mod
-	cd src ; go mod tidy
-	cd src ; GOPATH="${PWD}" go install $(MODULE_NAME)/countwords
+ifndef GOPATH
+$(error GOPATH is not set)
+endif
 
-src/go.mod:
-	cd src ; go mod init $(MODULE_NAME)
+build: go.mod
+	go mod tidy
+	go install $(MODULE_NAME)/countwords
+
+go.mod:
+	go mod init $(MODULE_NAME)
 
 clean:
-	rm -rf bin
-	chmod -R u+w pkg ; rm -rf pkg
-	rm -f src/go.mod src/go.sum
+	rm -f ${GOPATH}/bin/countwords
+	#chmod -R u+w pkg ; rm -rf pkg
+	rm -f go.mod go.sum
