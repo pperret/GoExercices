@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"dummy.com/C4E11/github"
+	"Chapter-4/Exercice-11/github"
 )
 
 // main is the entry point of the program

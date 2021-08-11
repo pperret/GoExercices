@@ -4,7 +4,7 @@ package main
 import (
 	"fmt"
 
-	"dummy.com/C2E1/tempconv"
+	"Chapter-2/Exercice-1/tempconv"
 )
 
 func main() {

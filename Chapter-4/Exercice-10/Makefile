@@ -1,4 +1,4 @@
-MODULE_NAME=dummy.com/C4E10
+MODULE_NAME=Chapter-4/Exercice-10
 
 ifndef GOPATH
 $(error GOPATH is not set)
@@ -16,4 +16,3 @@ run:
 
 clean:
 	rm -f ${GOPATH}/bin/issues
-	rm -f go.mod

@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"strings"
 
-	"dummy.com/C4E14/github"
+	"Chapter-4/Exercice-14/github"
 )
 
 // issuesList is the global list of issues returned from github

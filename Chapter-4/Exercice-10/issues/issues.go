@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	"dummy.com/C4E10/github"
+	"Chapter-4/Exercice-10/github"
 )
 
 func main() {

@@ -1,4 +1,4 @@
-MODULE_NAME=dummy.com/C5E7
+MODULE_NAME=Chapter-5/Exercice-7
 
 ifndef GOPATH
 $(error GOPATH is not set)
@@ -18,5 +18,4 @@ go.mod:
 clean:
 	rm -f ${GOPATH}/bin/prettyprint
 	#chmod -R u+w pkg ; rm -rf pkg
-	rm -f go.mod go.sum
 

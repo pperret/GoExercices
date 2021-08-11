@@ -1,4 +1,4 @@
-MODULE_NAME=dummy.com/C5E2
+MODULE_NAME=Chapter-5/Exercice-2
 
 ifndef GOPATH
 $(error GOPATH is not set)
@@ -14,4 +14,3 @@ go.mod:
 clean:
 	rm -f ${GOPATH}/bin/countelementtype
 	#chmod -R u+w pkg ; rm -rf pkg
-	rm -f go.mod go.sum

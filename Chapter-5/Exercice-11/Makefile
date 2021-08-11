@@ -1,4 +1,4 @@
-MODULE_NAME=dummy.com/C5E11
+MODULE_NAME=Chapter-5/Exercice-11
 
 ifndef GOPATH
 $(error GOPATH is not set)
@@ -13,5 +13,5 @@ go.mod:
 
 clean:
 	rm -f ${GOPATH}/bin/toposort
-	rm -f go.mod
+
 

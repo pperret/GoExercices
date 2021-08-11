@@ -1,4 +1,4 @@
-MODULE_NAME=dummy.com/C2E4
+MODULE_NAME=Chapter-2/Exercide-4
 
 ifndef GOPATH
 $(error GOPATH is not set)
@@ -12,4 +12,4 @@ go.mod:
 	go mod init $(MODULE_NAME)
 
 clean:
-	rm -f go.mod
+	# Done

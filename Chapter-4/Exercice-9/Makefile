@@ -1,4 +1,4 @@
-MODULE_NAME=dummy.com/C4E9
+MODULE_NAME=Chapter-4/Exercice-9
 
 ifndef GOPATH
 $(error GOPATH is not set)
@@ -13,4 +13,3 @@ go.mod:
 
 clean:
 	rm -f ${GOPATH}/bin/wordfreq
-	rm -f go.mod

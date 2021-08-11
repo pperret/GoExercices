@@ -1,4 +1,4 @@
-MODULE_NAME=dummy.com/C5E12
+MODULE_NAME=Chapter-5/Exercice-12
 
 ifndef GOPATH
 $(error GOPATH is not set)
@@ -14,4 +14,4 @@ go.mod:
 clean:
 	rm -f ${GOPATH}/bin/outline
 	#chmod -R u+w pkg ; rm -rf pkg
-	rm -f go.mod go.sum
+

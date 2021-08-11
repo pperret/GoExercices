@@ -5,9 +5,9 @@ import (
 	"os"
 	"strconv"
 
-	"dummy.com/C2E2/lenconv"
-	"dummy.com/C2E2/tempconv"
-	"dummy.com/C2E2/weightconv"
+	"Chapter-2/Exercice-2/lenconv"
+	"Chapter-2/Exercice-2/tempconv"
+	"Chapter-2/Exercice-2/weightconv"
 )
 
 func conv(t float64) {

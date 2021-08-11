@@ -1,4 +1,4 @@
-MODULE_NAME=dummy.com/C1E11
+MODULE_NAME=Chapter-1/Exercice-11
 
 ifndef GOPATH
 $(error GOPATH is not set)
@@ -13,5 +13,3 @@ go.mod:
 
 clean:
 	rm -f ${GOPATH}/bin/fetchall
-	rm -f go.mod
- 
