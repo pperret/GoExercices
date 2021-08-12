@@ -76,7 +76,7 @@ func buildMilestoneList(list *github.IssuesListResult) {
 	for _, issue := range *list {
 		if issue.Milestone != nil {
 			_, ok := milestoneList[issue.Milestone.Number]
-			if ok == false {
+			if !ok {
 				milestoneList[issue.Milestone.Number] = make(github.IssuesListResult, 0)
 			}
 			milestoneList[issue.Milestone.Number] = append(milestoneList[issue.Milestone.Number], issue)
@@ -89,7 +89,7 @@ func buildCreatorList(list *github.IssuesListResult) {
 	creatorList = make(map[string]github.IssuesListResult)
 	for _, issue := range *list {
 		_, ok := creatorList[issue.User.Login]
-		if ok == false {
+		if !ok {
 			creatorList[issue.User.Login] = make(github.IssuesListResult, 0)
 		}
 		creatorList[issue.User.Login] = append(creatorList[issue.User.Login], issue)
@@ -133,7 +133,7 @@ func handlerMilestone(w http.ResponseWriter, r *http.Request) {
 
 		// Look for the milestone in the list
 		ml, ok := milestoneList[id]
-		if ok == false {
+		if !ok {
 			http.NotFound(w, r)
 			return
 		}
@@ -154,7 +154,7 @@ func handlerCreator(w http.ResponseWriter, r *http.Request) {
 
 		// Look for the creator in the list
 		cl, ok := creatorList[login]
-		if ok == false {
+		if !ok {
 			http.NotFound(w, r)
 			return
 		}
@@ -182,7 +182,7 @@ func handlerDetails(w http.ResponseWriter, r *http.Request) {
 
 		// Look for the issue in the list
 		issue, ok := issuesIndexedList[id]
-		if ok == false {
+		if !ok {
 			http.NotFound(w, r)
 			return
 		}
