@@ -1,4 +1,4 @@
-module Chapter-5/Exercice-12
+module GoExercices
 
 go 1.16
 

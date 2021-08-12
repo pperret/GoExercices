@@ -2,8 +2,12 @@ TOPTARGETS :=build test clean
 
 SUBDIRS := $(wildcard Chapter-*/.)
 
-$(TOPTARGETS): $(SUBDIRS)
+$(TOPTARGETS): go.mod $(SUBDIRS)
 $(SUBDIRS):
 	cd $@ ; $(MAKE) $(MAKECMDGOALS)
 
 .PHONY: $(TOPTARGETS) $(SUBDIRS)
+
+go.mod:
+	go mod init GoExercices
+	

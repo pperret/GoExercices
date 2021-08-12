@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"Chapter-4/Exercice-11/github"
+	"GoExercices/Chapter-4/Exercice-11/github"
 )
 
 // main is the entry point of the program

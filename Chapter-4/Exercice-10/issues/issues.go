@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	"Chapter-4/Exercice-10/github"
+	"GoExercices/Chapter-4/Exercice-10/github"
 )
 
 func main() {

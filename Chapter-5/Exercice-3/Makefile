@@ -1,15 +1,12 @@
-MODULE_NAME=Chapter-5/Exercice-3
+MODULE_NAME=GoExercices/Chapter-5/Exercice-3
 
 ifndef GOPATH
 $(error GOPATH is not set)
 endif
 
-build: go.mod
+build:
 	go mod tidy
 	go install $(MODULE_NAME)/printtextnodes
-
-go.mod:
-	go mod init $(MODULE_NAME)
 
 clean:
 	rm -f ${GOPATH}/bin/printtextnodes

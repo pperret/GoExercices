@@ -1,15 +1,12 @@
-MODULE_NAME=Chapter-2/Exercide-4
+MODULE_NAME=GoExercices/Chapter-2/Exercice-4
 
 ifndef GOPATH
 $(error GOPATH is not set)
 endif
 
-test: go.mod
+test:
 	go mod tidy
 	go test -bench=. $(MODULE_NAME)/popcount
-
-go.mod:
-	go mod init $(MODULE_NAME)
 
 clean:
 	# Done

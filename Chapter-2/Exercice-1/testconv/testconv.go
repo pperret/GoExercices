@@ -4,7 +4,7 @@ package main
 import (
 	"fmt"
 
-	"Chapter-2/Exercice-1/tempconv"
+	"GoExercices/Chapter-2/Exercice-1/tempconv"
 )
 
 func main() {
