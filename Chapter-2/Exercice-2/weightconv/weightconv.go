@@ -13,7 +13,7 @@ type Pounds float64
 
 // Some well known constants
 const (
-	OnePoundK    Kilograms = 0.453592370   // Number of kilo per pound
+	OnePoundK    Kilograms = 0.453592370   // Number of kilos per pound
 	OneKilogramL Pounds    = 2.20462262185 // Number of pounds per kilo
 )
 
