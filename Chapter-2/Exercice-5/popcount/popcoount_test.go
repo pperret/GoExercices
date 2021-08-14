@@ -18,3 +18,10 @@ func BenchmarkPopCount2(b *testing.B) {
 		PopCount2(255)
 	}
 }
+
+// Bench the "Divide and Conquer Strategy" (really optimized) implémentation
+func BenchmarkPopCount3(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		PopCount3(255)
+	}
+}
