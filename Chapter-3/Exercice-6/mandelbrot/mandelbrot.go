@@ -13,7 +13,7 @@ func main() {
 	const (
 		xmin, ymin, xmax, ymax = -2, -2, +2, +2
 		width, height          = 1024, 1024
-		oversampling           = 1
+		oversampling           = 2
 	)
 	offX := float64(xmax-xmin) / width / oversampling
 	offY := float64(ymax-ymin) / height / oversampling
