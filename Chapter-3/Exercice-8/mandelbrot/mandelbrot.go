@@ -14,10 +14,10 @@ func Complex64Mandelbrot() {
 		iterations             = 200
 	)
 	for py := 0; py < height; py++ {
-		y := float64(py)/height*(ymax-ymin) + ymin
+		y := float32(py)/height*(ymax-ymin) + ymin
 		for px := 0; px < width; px++ {
-			x := float64(px)/width*(xmax-xmin) + xmin
-			z := complex64(complex(x, y))
+			x := float32(px)/width*(xmax-xmin) + xmin
+			z := complex(x, y)
 			var v complex64
 			for n := 0; n < iterations; n++ {
 				v = v*v + z
