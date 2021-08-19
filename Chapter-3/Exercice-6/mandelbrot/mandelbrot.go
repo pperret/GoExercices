@@ -56,16 +56,30 @@ func average(cl []color.Color) color.Color {
 
 // Computes the color of a pixel at a specific location
 func colorize(z complex128) color.Color {
-	const contrast = 15
 	c := color.RGBA{0, 0, 0, 255}
 	n := mandelbrot(z)
 	if n < 255 {
-		r := uint8(contrast * n)
-		b := uint8(255 - contrast*n)
-		g := uint8(255 - contrast*(n-10)*(n-10))
-		c = color.RGBA{r, g, b, 255}
+		c = getColor(n)
 	}
 	return c
+}
+
+// Computes the RGB color from the iteration count
+func getColor(n int) color.RGBA {
+	var sr, sg, sb uint8
+	const contrast = 15
+	n *= contrast
+	switch {
+	case n < 64:
+		sr, sg, sb = 0, uint8(n*4), 255
+	case n < 128:
+		sr, sg, sb = 0, 255, uint8(255-(n-64)*4)
+	case n < 192:
+		sr, sg, sb = uint8((n-128)*4), 255, 0
+	case n < 256:
+		sr, sg, sb = 255, uint8(256-(n-191)*4), 0
+	}
+	return color.RGBA{sr, sg, sb, 255}
 }
 
 // Computes the mandelbrot value of a pixel at a specific location
