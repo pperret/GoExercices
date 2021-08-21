@@ -8,18 +8,19 @@ import (
 
 func main() {
 	if len(os.Args) != 3 {
-		fmt.Printf("Usage: %s <word> <word>\n", os.Args[0])
+		fmt.Printf("Usage: %s <string> <string>\n", os.Args[0])
 		os.Exit(1)
 	}
 
 	res := anagram(os.Args[1], os.Args[2])
-	if res == true {
+	if res {
 		fmt.Println("There are anagrams")
 	} else {
 		fmt.Println("There are not anagrams")
 	}
 }
 
+// Checks if strings are anagrams
 func anagram(s1, s2 string) bool {
 	so1 := order(s1)
 	so2 := order(s2)
@@ -27,6 +28,7 @@ func anagram(s1, s2 string) bool {
 	return so1 == so2
 }
 
+// Sorts string characters in alphabetical order using bubble algorithm
 func order(s string) string {
 	t := []rune(s)
 	for j := 0; j < len(t)-1; j++ {
