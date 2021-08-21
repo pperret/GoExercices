@@ -79,16 +79,30 @@ func handler(w http.ResponseWriter, r *http.Request) {
 // Compute the color of a pixel at a specific location
 func mandelbrot(z complex128) color.Color {
 	const iterations = 200
-	const contrast = 15
 	var v complex128
-	for n := uint8(0); n < iterations; n++ {
+	for n := 0; n < iterations; n++ {
 		v = v*v + z
 		if cmplx.Abs(v) > 2 {
-			r := contrast * n
-			b := 255 - contrast*n
-			g := 255 - contrast*(n-10)*(n-10)
-			return color.RGBA{r, g, b, 255}
+			return getColor(n)
 		}
 	}
 	return color.Black
+}
+
+// Computes the RGB color from the iteration count
+func getColor(n int) color.RGBA {
+	var sr, sg, sb uint8
+	const contrast = 15
+	n *= contrast
+	switch {
+	case n < 64:
+		sr, sg, sb = 0, uint8(n*4), 255
+	case n < 128:
+		sr, sg, sb = 0, 255, uint8(255-(n-64)*4)
+	case n < 192:
+		sr, sg, sb = uint8((n-128)*4), 255, 0
+	case n < 256:
+		sr, sg, sb = 255, uint8(256-(n-191)*4), 0
+	}
+	return color.RGBA{sr, sg, sb, 255}
 }
