@@ -21,18 +21,15 @@ func main() {
 func comma(s string) string {
 	var buf bytes.Buffer
 
-	// Full lenght of the string
-	n := len(s)
-
 	// Length of the integer part
 	p := strings.IndexByte(s, '.')
 	if p < 0 {
-		p = n
+		p = len(s) // Full lenght of the string if there is no decimal part
 	}
 
 	// Start position of digits
 	pos := 0
-	if strings.HasPrefix(s, "-") == true || strings.HasPrefix(s, "+") == true {
+	if strings.HasPrefix(s, "-") || strings.HasPrefix(s, "+") {
 		pos = 1
 		p--
 	}
@@ -42,11 +39,11 @@ func comma(s string) string {
 	if m == 0 {
 		m = 3
 	}
-	m += pos // Don't forget the sign
-	buf.WriteString(s[:m])
+	m += pos
+	buf.WriteString(s[:m]) // Including the optional sign
 
 	// Next parts separated by commas
-	for ; m < p; m += 3 {
+	for ; m < p+pos; m += 3 {
 		buf.WriteString(",")
 		buf.WriteString(s[m : m+3])
 	}
