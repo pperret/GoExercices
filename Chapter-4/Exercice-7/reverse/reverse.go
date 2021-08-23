@@ -1,4 +1,4 @@
-// Reverse an array of integer
+// Reverse a UTF-8 string
 package main
 
 import (
@@ -7,18 +7,20 @@ import (
 )
 
 func main() {
-	str1 := "Bonjour à toutes les bêtes"
+	str1 := "Bonjour à toutes les bêtes. ます !!"
+	fmt.Println(str1)
+
 	tab1 := []byte(str1)
+	fmt.Printf("Before: % x\n", tab1)
 
 	tab2 := reverseString(tab1)
-	str2 := string(tab2)
+	fmt.Printf("After: % x\n", tab2)
 
-	fmt.Println(str1)
-	fmt.Printf("% x\n", tab1)
-	fmt.Printf("% x\n", tab2)
+	str2 := string(tab2)
 	fmt.Println(str2)
 }
 
+// Reverses a slice of bytes
 func reverseByte(b []byte) {
 	size := len(b)
 	for i := 0; i < len(b)/2; i++ {
@@ -26,7 +28,7 @@ func reverseByte(b []byte) {
 	}
 }
 
-// reverse a UTF8 string
+// Reverses a UTF8 string
 func reverseString(str []byte) []byte {
 
 	for i := 0; i < len(str); {
