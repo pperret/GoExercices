@@ -6,7 +6,7 @@ endif
 
 build:
 	go mod tidy
-	go install $(MODULE_NAME)/unique
+	go install $(MODULE_NAME)/squash
 
 clean:
-	rm -f ${GOPATH}/bin/unique
+	rm -f ${GOPATH}/bin/squash
