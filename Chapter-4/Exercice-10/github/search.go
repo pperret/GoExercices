@@ -8,13 +8,13 @@ import (
 	"strings"
 )
 
-// SearchIssues queries the GitHub issue tracker.
+// SearchIssues queries the GitHub issues tracker.
 func SearchIssues(terms []string) (*IssuesSearchResult, error) {
 
-	// Create the request
+	// Creates the request
 	q := url.QueryEscape(strings.Join(terms, " "))
 
-	// Send the request to github
+	// Sends the request to github
 	resp, err := http.Get(IssuesURL + "?q=" + q)
 	if err != nil {
 		return nil, err
@@ -26,7 +26,7 @@ func SearchIssues(terms []string) (*IssuesSearchResult, error) {
 		return nil, fmt.Errorf("search query failed: %s", resp.Status)
 	}
 
-	// Decode the response
+	// Decodes the response
 	var result IssuesSearchResult
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		resp.Body.Close()

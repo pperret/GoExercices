@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// IssuesURL is the base URL to access github issues
+// IssuesURL is the base URL to access GitHub issues
 const IssuesURL = "https://api.github.com/search/issues"
 
 // IssuesSearchResult is the list of Issues provided by search

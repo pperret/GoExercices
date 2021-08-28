@@ -1,4 +1,5 @@
-// Issues prints a table of GitHub issues matching the search terms.
+// This program prints GitHub issues matching the search terms and sorted by date ranges
+// (less than one month, less than one year, more than one year).
 package main
 
 import (
@@ -12,7 +13,7 @@ import (
 
 func main() {
 
-	// Get the issue according input parameters
+	// Get the issues according input parameters
 	result, err := github.SearchIssues(os.Args[1:])
 	if err != nil {
 		log.Fatal(err)
@@ -20,15 +21,17 @@ func main() {
 
 	fmt.Printf("%d issues in total\n", result.TotalCount)
 
+	// Computes the milestone dates
 	now := time.Now()
 	month := now.AddDate(0, -1, 0)
 	year := now.AddDate(-1, 0, 0)
 
+	// Creates the list of issues
 	less1month := make([]*github.Issue, 0)
 	less1year := make([]*github.Issue, 0)
 	more1year := make([]*github.Issue, 0)
 
-	// Sort the issues
+	// Sorts the issues
 	for _, item := range result.Items {
 		if item.CreatedAt.After(month) {
 			less1month = append(less1month, item)
@@ -39,21 +42,22 @@ func main() {
 		}
 	}
 
-	// Less than one month
+	// Displays the list of issues less than one month
 	fmt.Printf("Less than one month (%d issues)\n", len(less1month))
-	for _, item := range less1month {
-		fmt.Printf("#%-5d %9.9s %.55s\n", item.Number, item.User.Login, item.Title)
-	}
+	displayIssues(less1month)
 
-	// Less than one year
+	// Displays the list of issues less than one year
 	fmt.Printf("Less than one year (%d issues)\n", len(less1year))
-	for _, item := range less1year {
-		fmt.Printf("#%-5d %9.9s %.55s\n", item.Number, item.User.Login, item.Title)
-	}
+	displayIssues(less1year)
 
-	// More than one year
+	// Displays the list of issues more than one year
 	fmt.Printf("More than one year (%d issues)\n", len(more1year))
-	for _, item := range more1year {
-		fmt.Printf("#%-5d %9.9s %.55s\n", item.Number, item.User.Login, item.Title)
+	displayIssues(more1year)
+}
+
+// Displays a list of issues
+func displayIssues(issues []*github.Issue) {
+	for _, issue := range issues {
+		fmt.Printf("#%-5d %9.9s %.55s\n", issue.Number, issue.User.Login, issue.Title)
 	}
 }
