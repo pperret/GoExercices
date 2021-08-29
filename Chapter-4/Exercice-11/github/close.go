@@ -9,35 +9,37 @@ import (
 )
 
 // CloseIssue closes an issue (the issue can be already closed)
-func CloseIssue(username, passwd, owner, repo, issueNumber string) (*Issue, error) {
+func CloseIssue(username, token, owner, repo, issueNumber string) (*Issue, error) {
+	// Builds the URL
+	patchURL := strings.Join([]string{URLRepos, owner, repo, "issues", issueNumber}, "/")
 
-	// Create the URL
-	patchURL := strings.Join([]string{"https://api.github.com/repos", owner, repo, "issues", issueNumber}, "/")
-
-	// Build the update request
+	// Builds the update request
 	var issue Issue
 	issue.State = "closed"
 
-	// Create the JSON request
+	// Creates the JSON request
 	var requestBuffer bytes.Buffer
 	if err := json.NewEncoder(&requestBuffer).Encode(&issue); err != nil {
 		return nil, err
 	}
 
-	// Build the HTTP request
+	// Builds the HTTP request
 	client := &http.Client{}
 	httpRequest, err := http.NewRequest("PATCH", patchURL, &requestBuffer)
 	if err != nil {
 		return nil, err
 	}
 
-	// Set authentication access
-	httpRequest.SetBasicAuth(username, passwd)
+	// Sets authentication access
+	httpRequest.SetBasicAuth(username, token)
 
-	// Set content-type
+	// Sets content-type
 	httpRequest.Header.Add("Content-Type", "application/json")
 
-	// Send the request to github
+	// Sets Accept header (recommanded by GitHub)
+	httpRequest.Header.Add("Accept", "application/vnd.github.v3+json")
+
+	// Sends the request to github
 	resp, err := client.Do(httpRequest)
 	if err != nil {
 		return nil, err
@@ -46,10 +48,10 @@ func CloseIssue(username, passwd, owner, repo, issueNumber string) (*Issue, erro
 	// We must close resp.Body on all execution paths.
 	if resp.StatusCode != http.StatusOK {
 		resp.Body.Close()
-		return nil, fmt.Errorf("Close query failed: %s", resp.Status)
+		return nil, fmt.Errorf("close query failed: %s", resp.Status)
 	}
 
-	// Decode the github response
+	// Decodes the github response
 	var result Issue
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		resp.Body.Close()

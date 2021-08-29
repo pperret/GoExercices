@@ -4,23 +4,28 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"runtime"
 )
 
 // getText gets the comment body using the prefered editor
 func getText() (string, error) {
-	// Get the prefered editor
+	// Gets the prefered editor
 	editor := os.Getenv("EDITOR")
 	if editor == "" {
-		editor = "notepad.exe"
+		if runtime.GOOS == "windows" {
+			editor = "notepad.exe"
+		} else {
+			editor = "vi"
+		}
 	}
 
-	// Get the full editor pathname
+	// Gets the full editor pathname
 	editorPath, err := exec.LookPath(editor)
 	if err != nil {
 		return "", err
 	}
 
-	// Create a temporary file
+	// Creates a temporary file
 	file, err := ioutil.TempFile("", "issue")
 	if err != nil {
 		return "", err
@@ -28,7 +33,7 @@ func getText() (string, error) {
 	file.Close()
 	filename := file.Name()
 
-	// Run the editor
+	// Runs the editor
 	cmd := &exec.Cmd{
 		Path:   editorPath,
 		Args:   []string{editor, filename},
@@ -42,7 +47,7 @@ func getText() (string, error) {
 		return "", err
 	}
 
-	// Get the content of the temporary file
+	// Gets the content of the temporary file
 	bytes, err := ioutil.ReadFile(filename)
 	if err != nil {
 		os.Remove(filename)
@@ -50,7 +55,7 @@ func getText() (string, error) {
 	}
 	body := string(bytes)
 
-	// Remove the temporary file
+	// Removes the temporary file
 	os.Remove(filename)
 	return body, nil
 }

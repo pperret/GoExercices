@@ -7,14 +7,14 @@ import (
 	"strings"
 )
 
-// ReadIssue reads issue data
-func ReadIssue(owner string, repo string, issueNumber string) (*Issue, error) {
+// ListIssues gets the issues list.
+func ListIssues(owner, repos string) (*IssuesListResult, error) {
 	// Builds the URL
-	readURL := strings.Join([]string{URLRepos, owner, repo, "issues", issueNumber}, "/")
+	listURL := strings.Join([]string{URLRepos, owner, repos, "issues"}, "/")
 
 	// Builds the HTTP request
 	client := &http.Client{}
-	httpRequest, err := http.NewRequest("GET", readURL, nil)
+	httpRequest, err := http.NewRequest("GET", listURL, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -34,16 +34,15 @@ func ReadIssue(owner string, repo string, issueNumber string) (*Issue, error) {
 	// We must close resp.Body on all execution paths.
 	if resp.StatusCode != http.StatusOK {
 		resp.Body.Close()
-		return nil, fmt.Errorf("read query failed: %s", resp.Status)
+		return nil, fmt.Errorf("list query failed: %s", resp.Status)
 	}
 
 	// Decodes the response
-	var result Issue
+	var result IssuesListResult
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		resp.Body.Close()
 		return nil, err
 	}
-
 	resp.Body.Close()
 	return &result, nil
 }

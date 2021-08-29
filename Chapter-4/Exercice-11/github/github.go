@@ -6,14 +6,18 @@ import (
 	"time"
 )
 
-// IssuesURL is the base URL to access github issues
-const IssuesURL = "https://api.github.com/search/issues"
+// Base URLs to access GitHub issues
+const URLSearch = "https://api.github.com/search/issues"
+const URLRepos = "https://api.github.com/repos"
 
 // IssuesSearchResult is the list of Issues provided by search
 type IssuesSearchResult struct {
 	TotalCount int      `json:"total_count"` // Number of issues
 	Items      []*Issue // Issues
 }
+
+// IssuesListResult is the list of issues of a repository
+type IssuesListResult []Issue
 
 // Issue is the data of an issue
 type Issue struct {
