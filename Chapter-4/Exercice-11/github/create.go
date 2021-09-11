@@ -10,44 +10,44 @@ import (
 
 // CreateIssue creates a new issue in the repository
 func CreateIssue(username, token, owner, repo, title string) (*Issue, error) {
-	// Builds the URL
+	// Build the URL
 	postURL := strings.Join([]string{URLRepos, owner, repo, "issues"}, "/")
 
-	// Gets the body using the prefered editor
+	// Get the body using the prefered editor
 	body, err := getText()
 	if err != nil {
 		return nil, err
 	}
 
-	// Builds the issue
+	// Build the issue
 	var issue Issue
 	issue.Title = title
 	issue.Body = body
 	issue.State = "open"
 
-	// Creates the JSON request
+	// Create the JSON request
 	var request bytes.Buffer
 	if err := json.NewEncoder(&request).Encode(&issue); err != nil {
 		return nil, err
 	}
 
-	// Builds the HTTP request
+	// Build the HTTP request
 	client := &http.Client{}
 	httpRequest, err := http.NewRequest("POST", postURL, &request)
 	if err != nil {
 		return nil, err
 	}
 
-	// Sets authentication access
+	// Set authentication access
 	httpRequest.SetBasicAuth(username, token)
 
-	// Sets content-type
+	// Set content-type
 	httpRequest.Header.Add("Content-Type", "application/json")
 
-	// Sets Accept header (recommanded by GitHub)
+	// Set Accept header (recommanded by GitHub)
 	httpRequest.Header.Add("Accept", "application/vnd.github.v3+json")
 
-	// Sends the request to GitHub
+	// Send the request to GitHub
 	resp, err := client.Do(httpRequest)
 	if err != nil {
 		return nil, err
@@ -59,7 +59,7 @@ func CreateIssue(username, token, owner, repo, title string) (*Issue, error) {
 		return nil, fmt.Errorf("create query failed: %s", resp.Status)
 	}
 
-	// Decodes the response
+	// Decode the response
 	var result Issue
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		resp.Body.Close()

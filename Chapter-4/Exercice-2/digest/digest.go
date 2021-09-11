@@ -8,8 +8,10 @@ import (
 	"fmt"
 )
 
+// algo is a program flag used to set the digest algorithm to be used
 var algo = flag.String("d", "sha256", "Digest to be used")
 
+// main is the entry point of the program
 func main() {
 	flag.Parse()
 	var input string

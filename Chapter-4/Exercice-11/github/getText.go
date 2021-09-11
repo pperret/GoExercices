@@ -9,7 +9,7 @@ import (
 
 // getText gets the comment body using the prefered editor
 func getText() (string, error) {
-	// Gets the prefered editor
+	// Get the prefered editor
 	editor := os.Getenv("EDITOR")
 	if editor == "" {
 		if runtime.GOOS == "windows" {
@@ -19,13 +19,13 @@ func getText() (string, error) {
 		}
 	}
 
-	// Gets the full editor pathname
+	// Get the full editor pathname
 	editorPath, err := exec.LookPath(editor)
 	if err != nil {
 		return "", err
 	}
 
-	// Creates a temporary file
+	// Create a temporary file
 	file, err := ioutil.TempFile("", "issue")
 	if err != nil {
 		return "", err
@@ -33,7 +33,7 @@ func getText() (string, error) {
 	file.Close()
 	filename := file.Name()
 
-	// Runs the editor
+	// Run the editor
 	cmd := &exec.Cmd{
 		Path:   editorPath,
 		Args:   []string{editor, filename},
@@ -47,7 +47,7 @@ func getText() (string, error) {
 		return "", err
 	}
 
-	// Gets the content of the temporary file
+	// Get the content of the temporary file
 	bytes, err := ioutil.ReadFile(filename)
 	if err != nil {
 		os.Remove(filename)
@@ -55,7 +55,7 @@ func getText() (string, error) {
 	}
 	body := string(bytes)
 
-	// Removes the temporary file
+	// Remove the temporary file
 	os.Remove(filename)
 	return body, nil
 }

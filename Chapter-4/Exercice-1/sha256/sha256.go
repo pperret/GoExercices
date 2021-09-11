@@ -6,6 +6,15 @@ import (
 	"fmt"
 )
 
+// main is the entry point of the program
+func main() {
+	c1 := sha256.Sum256([]byte("x"))
+	c2 := sha256.Sum256([]byte("X"))
+	d := different(c1, c2)
+	fmt.Printf("%x\n%x\n%d\n", c1, c2, d)
+}
+
+// different computes the count of differents bits in two SHA-256 digests
 func different(c1, c2 [32]uint8) int {
 	n := 0
 	for i := range c1 {
@@ -14,11 +23,4 @@ func different(c1, c2 [32]uint8) int {
 		}
 	}
 	return n
-}
-
-func main() {
-	c1 := sha256.Sum256([]byte("x"))
-	c2 := sha256.Sum256([]byte("X"))
-	d := different(c1, c2)
-	fmt.Printf("%x\n%x\n%d\n", c1, c2, d)
 }

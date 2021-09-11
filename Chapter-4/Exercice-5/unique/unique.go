@@ -5,6 +5,7 @@ import (
 	"fmt"
 )
 
+// main is the entry point of the program
 func main() {
 	tab := []string{"toto", "titi", "tutu", "tutu", "tete", "tete", "tete", "tata", "titi"}
 
@@ -14,7 +15,7 @@ func main() {
 	fmt.Println(tab2)
 }
 
-// Purge adjacent strings
+// adjacent purges adjacent strings
 func adjacent(s []string) []string {
 	i := 0
 	for _, str := range s {

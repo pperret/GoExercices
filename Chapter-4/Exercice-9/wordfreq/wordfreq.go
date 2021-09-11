@@ -7,6 +7,7 @@ import (
 	"os"
 )
 
+// main is the entry point of the program
 func main() {
 	seen := make(map[string]int) // a set of words
 	input := bufio.NewScanner(os.Stdin)

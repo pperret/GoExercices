@@ -6,6 +6,7 @@ import (
 	"unicode/utf8"
 )
 
+// main is the entry point of the program
 func main() {
 	str1 := "Bonjour à toutes les bêtes. ます !!"
 	fmt.Println(str1)
@@ -20,15 +21,7 @@ func main() {
 	fmt.Println(str2)
 }
 
-// Reverses a slice of bytes
-func reverseByte(b []byte) {
-	size := len(b)
-	for i := 0; i < len(b)/2; i++ {
-		b[i], b[size-1-i] = b[size-1-i], b[i]
-	}
-}
-
-// Reverses a UTF8 string
+// reverseString reverses a UTF8 string
 func reverseString(str []byte) []byte {
 
 	for i := 0; i < len(str); {
@@ -38,4 +31,12 @@ func reverseString(str []byte) []byte {
 	}
 	reverseByte(str)
 	return str
+}
+
+// reverseByte reverses a slice of bytes
+func reverseByte(b []byte) {
+	size := len(b)
+	for i := 0; i < len(b)/2; i++ {
+		b[i], b[size-1-i] = b[size-1-i], b[i]
+	}
 }

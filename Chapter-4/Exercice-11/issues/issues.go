@@ -12,14 +12,14 @@ import (
 // main is the entry point of the program
 func main() {
 
-	// Checks parameters
+	// Check the program parameters
 	if len(os.Args) < 2 {
 		usage(os.Args[0])
 		os.Exit(1)
 	}
 
 	switch os.Args[1] {
-	// Lists issues
+	// List GitHub issues
 	case "list":
 		if len(os.Args) < 4 {
 			fmt.Fprintf(os.Stderr, "Usage: %s list <owner> <repository>\n", os.Args[0])
@@ -33,23 +33,22 @@ func main() {
 			fmt.Printf("#%5d %9.9s %.55s\n", item.Number, item.User.Login, item.Title)
 		}
 
-	// Searchs issues
+	// Search for GitHub issues
 	case "search":
 		if len(os.Args) < 3 {
 			fmt.Fprintf(os.Stderr, "Usage: %s search <param> [params...]\n", os.Args[0])
 			os.Exit(1)
 		}
-		// Gets the issue according on input parameters
+		// Get the issue according on input parameters
 		result, err := github.SearchIssues(os.Args[2:])
 		if err != nil {
 			log.Fatal(err)
 		}
-		//fmt.Printf("%d issues:\n", result.TotalCount)
 		for _, item := range result.Items {
 			fmt.Printf("#%5d %9.9s %.55s\n", item.Number, item.User.Login, item.Title)
 		}
 
-	// Creates an issue
+	// Create a GitHub issue
 	case "create":
 		if len(os.Args) < 7 {
 			fmt.Fprintf(os.Stderr, "Usage: %s create <user|email> <token> <owner> <repository> <title>\n", os.Args[0])
@@ -61,7 +60,7 @@ func main() {
 		}
 		fmt.Printf("#%5d %9.9s %.55s\n", result.Number, result.User.Login, result.Title)
 
-	// Reads a single issue
+	// Read a single GitHub issue
 	case "read":
 		if len(os.Args) < 5 {
 			fmt.Fprintf(os.Stderr, "Usage: %s read <owner> <repository> <issue number>\n", os.Args[0])
@@ -73,7 +72,7 @@ func main() {
 		}
 		fmt.Printf("#%5d %9.9s %.55s\n", result.Number, result.User.Login, result.Title)
 
-	// Appends a comment to an existing issue
+	// Append a comment to an existing GitHub issue
 	case "comment":
 		if len(os.Args) < 7 {
 			fmt.Fprintf(os.Stderr, "Usage: %s comment <user|email> <token> <owner> <repository> <issue number>\n", os.Args[0])
@@ -84,7 +83,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-	// Closes an issue (an issue cannot be deleted)
+	// Close a GitHub issue (an issue cannot be deleted using APIs)
 	case "close":
 		if len(os.Args) < 7 {
 			fmt.Fprintf(os.Stderr, "Usage: %s close <user|email> <token> <owner> <repository> <issue number>\n", os.Args[0])
@@ -100,6 +99,7 @@ func main() {
 	}
 }
 
+// usage displays the command line syntax of the program
 func usage(argv0 string) {
 	fmt.Fprintf(os.Stderr, "Usage: %s <cmd> [args]\n", argv0)
 	fmt.Fprintf(os.Stderr, "Available commands are: 'list', 'search', 'create', 'read', 'comment' and 'close'\n")

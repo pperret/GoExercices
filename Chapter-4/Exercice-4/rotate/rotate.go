@@ -5,6 +5,7 @@ import (
 	"fmt"
 )
 
+// main is the entry point of the program
 func main() {
 	tab := []int{0, 1, 2, 3, 4, 5, 6, 7, 8}
 
@@ -13,7 +14,7 @@ func main() {
 	fmt.Println(tab)
 }
 
-// Rotate a slice of ints in place
+// rotate rotates a slice of ints in place
 func rotate(s []int, p int) []int {
 	t := make([]int, p)
 	copy(t, s[0:p])

@@ -10,6 +10,7 @@ import (
 	"unicode/utf8"
 )
 
+// main is the entry point of the program
 func main() {
 	counts := make(map[rune]int)    // counts of Unicode characters
 	var utflen [utf8.UTFMax + 1]int // count of lengths of UTF-8 encodings
@@ -67,5 +68,3 @@ func main() {
 		fmt.Printf("%d spaces\n", space)
 	}
 }
-
-//!-

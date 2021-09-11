@@ -274,7 +274,7 @@ func loadIndexFile(comics Comics) (*WordIndexes, error) {
 }
 
 // readIndexFile reads indexes from the local cache file
-// A nil value (not an error) is returned if there is cache file
+// A nil value (not an error) is returned if there is no cache file
 func readIndexFile() (*WordIndexes, error) {
 
 	// Open the input file
@@ -310,7 +310,7 @@ func buildIndex(comics Comics) (*WordIndexes, error) {
 	for _, comic := range comics {
 
 		// Get words in the comic transcript
-		words, err := ScanWords(comic.Transcript)
+		words, err := scanWords(comic.Transcript)
 		if err != nil {
 			return nil, err
 		}
@@ -324,8 +324,8 @@ func buildIndex(comics Comics) (*WordIndexes, error) {
 	return &indexes, nil
 }
 
-// ScanWords scans words in a string
-func ScanWords(text string) (map[string]bool, error) {
+// scanWords scans words in a string
+func scanWords(text string) (map[string]bool, error) {
 
 	// Create the scanner
 	scanner := bufio.NewScanner(strings.NewReader(text))
@@ -348,7 +348,7 @@ func ScanWords(text string) (map[string]bool, error) {
 	return words, nil
 }
 
-// WriteIndexFile writes indexes into the local file
+// writeIndexFile writes indexes into the local cache file
 func writeIndexFile(indexes *WordIndexes) error {
 
 	// Open the output file

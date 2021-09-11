@@ -7,6 +7,7 @@ import (
 	"unicode/utf8"
 )
 
+// main is the entry point of the program
 func main() {
 	str1 := "	 Bonjour    à tous les éléments  !!      !! 	 "
 	fmt.Printf("%q\n", str1)
@@ -21,7 +22,7 @@ func main() {
 	fmt.Printf("%q\n", str2)
 }
 
-// Squashes adjacent spaces
+// squash squashes adjacent spaces
 func squash(s []byte) []byte {
 	to := 0
 	space := false
