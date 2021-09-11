@@ -38,9 +38,9 @@ func main() {
 	}
 
 	// Get movie data according to the search tag
-	movie, err := GetMovieData(os.Args[1], os.Args[2])
+	movie, err := getMovieData(os.Args[1], os.Args[2])
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error %v\n", err)
+		fmt.Fprintf(os.Stderr, "Unable to get movie data: %v\n", err)
 		os.Exit(2)
 	}
 
@@ -53,15 +53,15 @@ func main() {
 	// Download the poster
 	ext := filepath.Ext(movie.Poster)
 	name := movie.Title + ext
-	err = DownloadPoster(movie.Poster, name)
+	err = downloadPoster(movie.Poster, name)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error %v\n", err)
+		fmt.Fprintf(os.Stderr, "Unable to download the poster: %v\n", err)
 		os.Exit(4)
 	}
 }
 
-// GetMovieData gets data about a movie identified by its title
-func GetMovieData(apikey, name string) (*Movie, error) {
+// getMovieData gets data about a movie identified by its title
+func getMovieData(apikey, name string) (*Movie, error) {
 
 	// Build the request
 	values := make(url.Values)
@@ -80,7 +80,7 @@ func GetMovieData(apikey, name string) (*Movie, error) {
 
 	// Check the status code
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("Read query failed: %s", resp.Status)
+		return nil, fmt.Errorf("read query failed: %s", resp.Status)
 	}
 
 	// Decode the response
@@ -92,8 +92,8 @@ func GetMovieData(apikey, name string) (*Movie, error) {
 	return &movie, nil
 }
 
-// DownloadPoster downloads the poster of a movie
-func DownloadPoster(poster, name string) error {
+// downloadPoster downloads the poster of a movie
+func downloadPoster(poster, name string) error {
 
 	// Send the request to the server
 	resp, err := http.Get(poster)
@@ -106,7 +106,7 @@ func DownloadPoster(poster, name string) error {
 
 	// Check the status code
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("Read query failed: %s", resp.Status)
+		return fmt.Errorf("read query failed: %s", resp.Status)
 	}
 
 	// Open the output file
