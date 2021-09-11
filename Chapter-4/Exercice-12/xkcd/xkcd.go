@@ -99,7 +99,7 @@ func main() {
 
 }
 
-// loadComics load comics or downloads them if they are not already stored locally
+// loadComics loads comics or downloads them if they are not already stored locally
 func loadComics() (Comics, error) {
 	// Reads comics from the local store
 	comics, err := readComics()
