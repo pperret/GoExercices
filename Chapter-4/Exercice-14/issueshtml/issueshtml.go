@@ -14,86 +14,98 @@ import (
 	"GoExercices/Chapter-4/Exercice-14/github"
 )
 
-// issuesList is the global list of issues returned from github
-var issuesList *github.IssuesListResult
+// IssuesList is the global list of Issues returned bu GitHub
+type IssuesList []*github.Issue
 
-// issuesList is the global list of issues (indexed by their ID)
-var issuesIndexedList map[int]github.Issue
+// IssuesIndexedList is the global list of issues (indexed by their ID)
+type IssuesIndexedList map[int]*github.Issue
 
-// milestoneList is the list of issues per milestone (identified by their ID)
-var milestoneList map[int]github.IssuesListResult
+// IssuesMilestoneList is the list of issues per milestone (identified by their ID)
+type IssuesMilestoneList map[int]IssuesList
 
-// creatorList is the list of issues per creator (identified by their login name)
-var creatorList map[string]github.IssuesListResult
+// IssuesCreatorList is the list of issues per creator (identified by their login name)
+type IssuesCreatorList map[string]IssuesList
 
 // main is the entry point of the program
 func main() {
 
+	// Check program arguments
 	if len(os.Args) != 3 {
-		fmt.Fprintf(os.Stderr, "Usage: %s <user> <password>\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Usage: %s <owner> <repos>\n", os.Args[0])
 		os.Exit(1)
 	}
 
-	// Get the list from the server
-	var err error
-	issuesList, err = github.ListIssues(os.Args[1], os.Args[2])
+	// Get the global list of issues from the GitHub server
+	issuesList, err := getIssuesList(os.Args[1], os.Args[2])
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// Build the full issues list indexed by their ID
-	buildIndexedIssueList(issuesList)
+	// Build the list of issues (indexed by their Number)
+	issuesIndexedList := buildIndexedList(&issuesList)
 
 	// Build the issues lists per milestone (identified by their ID)
-	buildMilestoneList(issuesList)
+	issuesMilestoneList := buildMilestoneList(&issuesList)
 
 	// Build the issues lists per creator (identified by their login name)
-	buildCreatorList(issuesList)
+	issuesCreatorList := buildCreatorList(&issuesList)
 
 	// Create URL handlers
-	http.HandleFunc("/", handlerList)
-	http.HandleFunc("/milestone/", handlerMilestone)
-	http.HandleFunc("/creator/", handlerCreator)
-	http.HandleFunc("/details/", handlerDetails)
+	http.Handle("/", issuesList)
+	http.Handle("/milestone/", issuesMilestoneList)
+	http.Handle("/creator/", issuesCreatorList)
+	http.Handle("/details/", issuesIndexedList)
 
 	// Activate web server
 	log.Fatal(http.ListenAndServe("localhost:8000", nil))
 }
 
-// buildIndexedIssueList builds the global list of issues (identified by their ID)
-func buildIndexedIssueList(list *github.IssuesListResult) {
+// getIssuesList gets the list of Issues
+func getIssuesList(owner, repos string) (IssuesList, error) {
 
-	// Create the indexed list
-	issuesIndexedList = make(map[int]github.Issue)
-	for _, issue := range *list {
-		issuesIndexedList[issue.Number] = issue
+	issuesList, err := github.ListIssues(owner, repos)
+	if err != nil {
+		return nil, err
 	}
+
+	return IssuesList(*issuesList), nil
+}
+
+// buildIndexedList builds the lists of issues (indexed by their ID)
+func buildIndexedList(list *IssuesList) IssuesIndexedList {
+	indexedList := make(IssuesIndexedList)
+	for _, issue := range *list {
+		indexedList[issue.Number] = issue
+	}
+	return indexedList
 }
 
 // buildMilestoneList builds the lists of issues per milestone (identified by their ID)
-func buildMilestoneList(list *github.IssuesListResult) {
-	milestoneList = make(map[int]github.IssuesListResult)
+func buildMilestoneList(list *IssuesList) IssuesMilestoneList {
+	milestoneList := make(IssuesMilestoneList)
 	for _, issue := range *list {
 		if issue.Milestone != nil {
 			_, ok := milestoneList[issue.Milestone.Number]
 			if !ok {
-				milestoneList[issue.Milestone.Number] = make(github.IssuesListResult, 0)
+				milestoneList[issue.Milestone.Number] = make(IssuesList, 0)
 			}
 			milestoneList[issue.Milestone.Number] = append(milestoneList[issue.Milestone.Number], issue)
 		}
 	}
+	return milestoneList
 }
 
 // buildCreatorList builds the lists of issues per creator (identified by their login name)
-func buildCreatorList(list *github.IssuesListResult) {
-	creatorList = make(map[string]github.IssuesListResult)
+func buildCreatorList(list *IssuesList) IssuesCreatorList {
+	creatorList := make(IssuesCreatorList)
 	for _, issue := range *list {
 		_, ok := creatorList[issue.User.Login]
 		if !ok {
-			creatorList[issue.User.Login] = make(github.IssuesListResult, 0)
+			creatorList[issue.User.Login] = make(IssuesList, 0)
 		}
 		creatorList[issue.User.Login] = append(creatorList[issue.User.Login], issue)
 	}
+	return creatorList
 }
 
 // getLastElement returns the last element of an URL path
@@ -106,117 +118,122 @@ func getLastElement(s string) string {
 }
 
 // handlerList displays the full list of issues
-func handlerList(w http.ResponseWriter, r *http.Request) {
+func (issuesList IssuesList) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Parse request parameters
 	if err := r.ParseForm(); err != nil {
-		log.Println(err)
-	} else {
-		displayIssuesList(w, issuesList)
+		http.Error(w, "Unable to parse request", http.StatusBadRequest)
+		return
 	}
+
+	// Display the issues list
+	displayIssuesList(w, &issuesList)
 }
 
-// handlerMilestone displays the list of a milestone issues (the URL contains the milestone ID)
-func handlerMilestone(w http.ResponseWriter, r *http.Request) {
+// ServeHTTP displays the list of a milestone issues (the URL contains the milestone ID)
+func (milestoneList IssuesMilestoneList) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Parse request parameters
 	if err := r.ParseForm(); err != nil {
-		log.Println(err)
-	} else {
-		// Get the milestone ID from the URL
-		ms := getLastElement(r.URL.Path)
-
-		// Convert the milestone ID to an integer
-		id, err := strconv.Atoi(ms)
-		if err != nil {
-			http.NotFound(w, r)
-			return
-		}
-
-		// Look for the milestone in the list
-		ml, ok := milestoneList[id]
-		if !ok {
-			http.NotFound(w, r)
-			return
-		}
-
-		// Display the list
-		displayIssuesList(w, &ml)
+		http.Error(w, "Unable to parse request", http.StatusBadRequest)
+		return
 	}
+
+	// Get the milestone ID from the URL
+	ms := getLastElement(r.URL.Path)
+
+	// Convert the milestone ID to an integer
+	id, err := strconv.Atoi(ms)
+	if err != nil {
+		http.Error(w, "Invalid milestone ID", http.StatusBadRequest)
+		return
+	}
+
+	// Look for the milestone in the list
+	ml, ok := milestoneList[id]
+	if !ok {
+		http.NotFound(w, r)
+		return
+	}
+
+	// Display the list
+	displayIssuesList(w, &ml)
 }
 
-// handlerCreator displays the list of a creator issues (the URL contains the creator login name)
-func handlerCreator(w http.ResponseWriter, r *http.Request) {
+// ServeHTTP displays the creator's issues list (the URL contains the creator login name)
+func (creatorList IssuesCreatorList) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Parse request parameters
 	if err := r.ParseForm(); err != nil {
-		log.Println(err)
-	} else {
-		// Get the creator from the URL
-		login := getLastElement(r.URL.Path)
-
-		// Look for the creator in the list
-		cl, ok := creatorList[login]
-		if !ok {
-			http.NotFound(w, r)
-			return
-		}
-
-		// Display the list
-		displayIssuesList(w, &cl)
+		http.Error(w, "Unable to parse request", http.StatusBadRequest)
+		return
 	}
+
+	// Get the creator from the URL
+	login := getLastElement(r.URL.Path)
+
+	// Look for the creator in the list
+	cl, ok := creatorList[login]
+	if !ok {
+		http.NotFound(w, r)
+		return
+	}
+
+	// Display the list
+	displayIssuesList(w, &cl)
 }
 
 // handlerDetails displays the details of an issue (the URL contains the issue ID)
-func handlerDetails(w http.ResponseWriter, r *http.Request) {
+func (indexedList IssuesIndexedList) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Parse request parameters
 	if err := r.ParseForm(); err != nil {
-		log.Println(err)
-	} else {
-		// Get the issue ID from the URL
-		ii := getLastElement(r.URL.Path)
-
-		// Convert the issue ID to an integer
-		id, err := strconv.Atoi(ii)
-		if err != nil {
-			http.NotFound(w, r)
-			return
-		}
-
-		// Look for the issue in the list
-		issue, ok := issuesIndexedList[id]
-		if !ok {
-			http.NotFound(w, r)
-			return
-		}
-
-		// Display the issue
-		displayIssueDetails(w, &issue)
+		http.Error(w, "Unable to parse request", http.StatusBadRequest)
+		return
 	}
+
+	// Get the issue ID from the URL
+	ii := getLastElement(r.URL.Path)
+
+	// Convert the issue ID to an integer
+	id, err := strconv.Atoi(ii)
+	if err != nil {
+		http.Error(w, "Invalid issue ID", http.StatusBadRequest)
+		return
+	}
+
+	// Look for the issue in the list
+	issue, ok := indexedList[id]
+	if !ok {
+		http.NotFound(w, r)
+		return
+	}
+
+	// Display the issue details
+	displayIssueDetails(w, issue)
 }
 
-// displayIssuesList displays the global list of issues
-func displayIssuesList(out io.Writer, list *github.IssuesListResult) {
+// displayIssuesList displays a list of issues
+func displayIssuesList(out io.Writer, list *IssuesList) {
 	var tmpl = template.Must(template.New("issuelist").Parse(`
 	<a href='/'>Home</a>
 	<table>
-	<tr style='textalign:left'>
-	<th>#</th>
-	<th>State</th>
-	<th>User</th>
-	<th>Milestone</th>
-	<th>Title</th>
-	</tr>
-	{{range $}}
-	<tr>
-	<td><a href='/details/{{.Number}}'>{{.Number}}</a></td>
-	<td>{{.State}}</td>
-	<td><a href='/creator/{{.User.Login}}'>{{.User.Login}}</a></td>
-	{{if .Milestone}}
-	<td><a href='/milestone/{{.Milestone.Number}}'>{{.Milestone.Title}}</a></td>
-	{{else}}
-	<td> </td>
-	{{end}}
-	<td>{{.Title}}</td>
-	</tr>
-	{{end}}
+		<tr style='textalign:left'>
+			<th>#</th>
+			<th>State</th>
+			<th>User</th>
+			<th>Milestone</th>
+			<th>Title</th>
+		</tr>
+		{{range $}}
+		<tr>
+			<td><a href='/details/{{.Number}}'>{{.Number}}</a></td>
+			<td>{{.State}}</td>
+			<td><a href='/creator/{{.User.Login}}'>{{.User.Login}}</a></td>
+			{{if .Milestone}}
+			<td><a href='/milestone/{{.Milestone.Number}}'>{{.Milestone.Title}}</a></td>
+			{{else}}
+			<td> </td>
+			{{end}}
+			<td>{{.Title}}</td>
+		</tr>
+		{{end}}
 	</table>
 	`))
 	if err := tmpl.Execute(out, list); err != nil {
@@ -235,23 +252,28 @@ func displayIssueDetails(out io.Writer, issue *github.Issue) {
 	<p><a href='/'>Home</a></p>
 	<p/>
 	<table>
-	<tr>
-	<td><b>ID:</b></td><td><a href='/details/{{.Number}}'>#{{.Number}}</a></td>
-	</tr>
-	<tr>
-	<td><b>State:</b></td><td>{{.State}}</td>
-	</tr>
-	<tr>
-	<td><b>User:</b></td><td><a href='/creator/{{.User.Login}}'>{{.User.Login}}</a></td>
-	</tr>
-	{{if .Milestone}}
-	<tr>
-	<td><b>Milestone:</b></td><td><a href='/milestone/{{.Milestone.Number}}'>{{.Milestone.Title}}</a></td>
-	</tr>
-	{{end}}
-	<tr>
-	<td><b>Title</b></td><td>{{.Title}}</td>
-	</tr>
+		<tr>
+			<td><b>ID:</b></td>
+			<td><a href='/details/{{.Number}}'>#{{.Number}}</a></td>
+		</tr>
+		<tr>
+			<td><b>State:</b></td>
+			<td>{{.State}}</td>
+		</tr>
+		<tr>
+			<td><b>User:</b></td>
+			<td><a href='/creator/{{.User.Login}}'>{{.User.Login}}</a></td>
+		</tr>
+		{{if .Milestone}}
+		<tr>
+			<td><b>Milestone:</b></td>
+			<td><a href='/milestone/{{.Milestone.Number}}'>{{.Milestone.Title}}</a></td>
+		</tr>
+		{{end}}
+		<tr>
+			<td><b>Title</b>
+			</td><td>{{.Title}}</td>
+		</tr>
 	</table>
 	<p/>
 	{{.Body|text2html}}

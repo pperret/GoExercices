@@ -5,18 +5,20 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 // ListIssues queries the GitHub issue tracker.
-func ListIssues(username string, passwd string) (*IssuesListResult, error) {
+func ListIssues(owner string, repos string) (*IssuesList, error) {
+
+	baseURL := strings.Join([]string{IssuesURL, owner, repos, "issues"}, "/")
 
 	num := 1
-
-	issues := make(IssuesListResult, 0)
+	issues := make(IssuesList, 0)
 
 	for {
-		// Build the request
-		url := IssuesURL + "?per_page=100&page=" + strconv.Itoa(num)
+		// Build the request with parameters
+		url := baseURL + "?per_page=100&page=" + strconv.Itoa(num)
 
 		// Build the HTTP request
 		client := &http.Client{}
@@ -25,12 +27,7 @@ func ListIssues(username string, passwd string) (*IssuesListResult, error) {
 			return nil, err
 		}
 
-		// Set authentication access
-		if len(username) > 0 && len(passwd) > 0 {
-			httpRequest.SetBasicAuth(username, passwd)
-		}
-
-		// Send the request to github
+		// Send the request to GitHub
 		resp, err := client.Do(httpRequest)
 		if err != nil {
 			return nil, err
@@ -42,10 +39,10 @@ func ListIssues(username string, passwd string) (*IssuesListResult, error) {
 			break
 		} else if resp.StatusCode != http.StatusOK {
 			resp.Body.Close()
-			return nil, fmt.Errorf("Create query failed: %s", resp.Status)
+			return nil, fmt.Errorf("create query failed: %s", resp.Status)
 		}
 
-		// Decode the response
+		// Decode the response using the JSON decoder
 		var result IssuesListResult
 		if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 			resp.Body.Close()
@@ -57,8 +54,9 @@ func ListIssues(username string, passwd string) (*IssuesListResult, error) {
 			break
 		}
 
+		// Append issues to the list
 		for _, issue := range result {
-			issues = append(issues, issue)
+			issues = append(issues, &issue)
 		}
 
 		// Next page

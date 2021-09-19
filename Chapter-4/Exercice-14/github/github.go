@@ -6,10 +6,10 @@ import (
 	"time"
 )
 
-// IssuesURL is the base URL to access github issues
-const IssuesURL = "https://api.github.com/repos/golang/go/issues"
+// IssuesURL is the base URL to access GitHub issues
+const IssuesURL = "https://api.github.com/repos"
 
-// IssuesListResult is the list of Issues
+// IssuesListResult is the list of Issues returned by GitHub
 type IssuesListResult []Issue // Issues
 
 // Issue is the data of an issue
@@ -37,3 +37,6 @@ type Milestone struct {
 	Title   string // Milestone title
 	Number  int    `json:"number"` // Milestone ID
 }
+
+// IssuesList is a list of Issues
+type IssuesList []*Issue
