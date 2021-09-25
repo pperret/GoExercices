@@ -20,25 +20,30 @@ func main() {
 	}
 }
 
+// Map containing the link's attribute name for each targeted element
+var linkAttributes = map[string][]string{
+	"a":      {"href"},
+	"link":   {"href"},
+	"iframe": {"src"},
+	"script": {"src"},
+	"img":    {"src"},
+	"form":   {"action"},
+	"html":   {"manifest"},
+	"video":  {"src", "poster"}}
+
 // visit appends to links each link found in node and returns the result.
 func visit(links []string, node *html.Node) []string {
 
-	// Map containing the link's attribute name for each targeted element
-	var nodes = map[string]string{
-		"a":      "href",
-		"link":   "href",
-		"iframe": "src",
-		"script": "src",
-		"img":    "src"}
-
 	// Look for a link in the current element
 	if node.Type == html.ElementNode {
-		attributeName, ok := nodes[node.Data]
-		if ok == true {
-			// Too bad, it's not a map. I need to scan each attribute
-			for _, a := range node.Attr {
-				if a.Key == attributeName {
-					links = append(links, a.Val)
+		attributeNames, ok := linkAttributes[node.Data]
+		if ok {
+			// Search for the corresponding attribute
+			for _, attributeName := range attributeNames {
+				for _, a := range node.Attr {
+					if a.Key == attributeName {
+						links = append(links, a.Val)
+					}
 				}
 			}
 		}
