@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"io/ioutil"
 	"os"
 	"testing"
@@ -11,45 +12,33 @@ import (
 // URL is the HTML page to test
 const URL = "http://golang.org"
 
-// TestPrettyPrint1 tests the prettyPrint function using a pipe for stdout
+// TestPrettyPrint1 tests the prettyPrint function using a memory buffer
 func TestPrettyPrint1(t *testing.T) {
-
-	// Redirect Stdout
-	old := os.Stdout
-	r, w, _ := os.Pipe()
-	os.Stdout = w
+	var buffer bytes.Buffer
 
 	// Execute the test
-	go func() {
-		if err := prettyPrint(URL); err != nil {
-			t.Fatalf("Error while formatting %v", err)
-		}
-		w.Close()
-	}()
+	if err := prettyPrint(&buffer, URL); err != nil {
+		t.Fatalf("Error while formatting %v", err)
+	}
 
 	// Parse the result
-	_, err := html.Parse(r)
+	_, err := html.Parse(&buffer)
 	if err != nil {
 		t.Fatalf("Error while parsing result: %v", err)
 	}
-
-	r.Close()
-	os.Stdout = old
 }
 
-// TestPrettyPrint2 tests the prettyPrint function using a temporay file for stdout
+// TestPrettyPrint2 tests the prettyPrint function using a temporary file
 func TestPrettyPrint2(t *testing.T) {
 
-	// Redirect Stdout to a temp file
-	old := os.Stdout
+	// Create the temporary file
 	tempfile, err := ioutil.TempFile("", "test")
 	if err != nil {
 		t.Fatalf("Unable to open temp file: %v", err)
 	}
-	os.Stdout = tempfile
 
 	// Execute the test
-	if err := prettyPrint(URL); err != nil {
+	if err := prettyPrint(tempfile, URL); err != nil {
 		t.Fatalf("Error while formatting %v", err)
 	}
 
@@ -59,8 +48,7 @@ func TestPrettyPrint2(t *testing.T) {
 		t.Fatalf("Error while parsing result: %v", err)
 	}
 
-	// Restore stdout
-	os.Stdout = old
+	// Close the temporary file
 	tempfile.Close()
 
 	// Remove the temp file
