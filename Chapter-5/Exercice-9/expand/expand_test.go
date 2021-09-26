@@ -26,12 +26,13 @@ type entry struct {
 }
 
 // List of test values
-var tests = []entry {
+var tests = []entry{
 	{"$foo", "1"},
 	{"$var", "2"},
 	{"$foo$var", "12"},
 	{"$var$foo", "21"},
 	{"$dummy", "Unknown"},
+	{"要素を取 $foo 要素を取 $var 要素を取", "要素を取 1 要素を取 2 要素を取"},
 }
 
 // TestExpand1 tests the expand function
@@ -41,7 +42,7 @@ func TestExpand1(t *testing.T) {
 	for _, e := range tests {
 		s := expand(e.value, f1)
 		if s != e.expected {
-			fmt.Printf("Error: source=%s, expected=%s, found=%s\n", e.value, e.expected, s)
+			fmt.Printf("Error: source=%q, expected=%q, found=%q\n", e.value, e.expected, s)
 		}
 	}
 }
