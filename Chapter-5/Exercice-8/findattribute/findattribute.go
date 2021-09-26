@@ -62,7 +62,7 @@ func forEachNode(n *html.Node, pre, post func(n *html.Node, id string) bool, id 
 
 	// Call the pre-processing function
 	if pre != nil {
-		if pre(n, id) == false {
+		if !pre(n, id) {
 			return n
 		}
 	}
@@ -77,7 +77,7 @@ func forEachNode(n *html.Node, pre, post func(n *html.Node, id string) bool, id 
 
 	// Call the post-processing function
 	if post != nil {
-		if post(n, id) == false {
+		if !post(n, id) {
 			return n
 		}
 	}
@@ -99,7 +99,6 @@ func startElement(n *html.Node, id string) bool {
 			return false
 		}
 	}
-	
+
 	return true
 }
-
