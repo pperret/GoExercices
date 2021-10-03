@@ -36,18 +36,18 @@ func main() {
 func topoSort(m map[string][]string) []string {
 	var result []string
 	seen := make(map[string]bool)
-	var visitAll func(course string)
 
+	var visitAll func(course string)
 	visitAll = func(course string) {
-		if seen[course] == false {
-			for _,c := range m[course] {
+		if !seen[course] {
+			for _, c := range m[course] {
 				visitAll(c)
 			}
 			seen[course] = true
-			result = append(result, course)	
-		}			
+			result = append(result, course)
+		}
 	}
-	
+
 	for course := range m {
 		visitAll(course)
 	}
