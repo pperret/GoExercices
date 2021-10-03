@@ -32,8 +32,22 @@ func outline(url string) error {
 		return err
 	}
 
-	// Get the pre/post functions
-	startElement, endElement := getCallBacks()
+	// depth is shared by both functions
+	var depth int
+
+	startElement := func(n *html.Node) {
+		if n.Type == html.ElementNode {
+			fmt.Printf("%*s<%s>\n", depth*2, "", n.Data)
+			depth++
+		}
+	}
+
+	endElement := func(n *html.Node) {
+		if n.Type == html.ElementNode {
+			depth--
+			fmt.Printf("%*s</%s>\n", depth*2, "", n.Data)
+		}
+	}
 
 	// Scan recursively the document tree
 	forEachNode(doc, startElement, endElement)
@@ -54,26 +68,4 @@ func forEachNode(n *html.Node, pre, post func(n *html.Node)) {
 	if post != nil {
 		post(n)
 	}
-}
-
-// getCallBacks returns functions to be used for document scanning
-func getCallBacks() (func(n *html.Node), func(n *html.Node)) {
-
-	// depth is shared by both functions
-	var depth int
-
-	start := func(n *html.Node) {
-		if n.Type == html.ElementNode {
-			fmt.Printf("%*s<%s>\n", depth*2, "", n.Data)
-			depth++
-		}
-	}
-
-	end := func(n *html.Node) {
-		if n.Type == html.ElementNode {
-			depth--
-			fmt.Printf("%*s</%s>\n", depth*2, "", n.Data)
-		}
-	}
-	return start, end
 }
