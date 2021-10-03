@@ -3,6 +3,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 )
 
 // prereqs maps computer science courses to their prerequisites.
@@ -28,13 +29,13 @@ var prereqs = map[string][]string{
 
 // main is the entry point of the program
 func main() {
-	courses := topoSort(prereqs)
-	if courses == nil {
-		fmt.Printf("Cycle detected!!\n")
-	} else {
-		for i, course := range courses {
-			fmt.Printf("%d:\t%s\n", i+1, course)
-		}
+	courses, err := topoSort(prereqs)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
+	}
+	for i, course := range courses {
+		fmt.Printf("%d:\t%s\n", i+1, course)
 	}
 }
 
@@ -48,37 +49,37 @@ const (
 )
 
 // topoSort sorts the courses
-func topoSort(m map[string][]string) []string {
+func topoSort(m map[string][]string) ([]string, error) {
 	var result []string
 	seen := make(map[string]courseState)
-	var visitAll func(course string) bool
 
-	visitAll = func(course string) bool {
+	var visitAll func(course string) error
+	visitAll = func(course string) error {
 		switch seen[course] {
 		case courseNotSeen:
 			seen[course] = coursePending
 			for _, c := range m[course] {
-				f := visitAll(c)
-				if f == false {
-					return false // Cycle
+				err := visitAll(c)
+				if err != nil {
+					return err // Cycle
 				}
 			}
 			seen[course] = courseSeen
 			result = append(result, course)
-			return true // Done
+			return nil // Done
 		case coursePending:
-			return false // Cycle
+			return fmt.Errorf("cycle detected") // Cycle
 		case courseSeen:
-			return true // Already seen
+			return nil // Already seen
 		}
-		return false
+		return fmt.Errorf("invalid course state")
 	}
 
 	for course := range m {
-		f := visitAll(course)
-		if f == false {
-			return nil
+		err := visitAll(course)
+		if err != nil {
+			return nil, err
 		}
 	}
-	return result
+	return result, nil
 }
