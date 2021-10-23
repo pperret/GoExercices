@@ -6,7 +6,7 @@ endif
 
 build:
 	go mod tidy
-	go install $(MODULE_NAME)/parser
+	go install $(MODULE_NAME)/stringreader
 
 clean:
-	rm -f ${GOPATH}/bin/parser
+	rm -f ${GOPATH}/bin/stringreader
