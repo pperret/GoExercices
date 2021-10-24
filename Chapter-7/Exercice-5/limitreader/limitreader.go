@@ -20,7 +20,7 @@ func (lr *limitReader) Read(p []byte) (lg int, err error) {
 
 	// Compute the number of bytes to read
 	max := int64(len(p))
-	if lr.pos+int64(max) > lr.len {
+	if lr.pos+max > lr.len {
 		max = lr.len - lr.pos
 	}
 
