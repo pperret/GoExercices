@@ -1,4 +1,4 @@
-// parser prints the links in an HTML document read from a string reader
+// stringreader is a sample program using a custom implementation of the StringReader interface
 package main
 
 import (
@@ -10,25 +10,25 @@ import (
 	"golang.org/x/net/html"
 )
 
-// StringReader is my own StringReader implementation
-type StringReader struct {
+// stringReader is a custom implementation of the StringReader class
+type stringReader struct {
 	str string
 	pos int
 }
 
-// Read is the implementation of the io.Reader interface for StringReader
-func (msr *StringReader) Read(p []byte) (lg int, err error) {
-	lg = copy(p, msr.str[msr.pos:])
-	msr.pos += lg
-	if msr.pos >= len(msr.str) {
+// Read is the implementation of the io.Reader interface for stringReader
+func (sr *stringReader) Read(p []byte) (lg int, err error) {
+	lg = copy(p, sr.str[sr.pos:])
+	sr.pos += lg
+	if sr.pos >= len(sr.str) {
 		err = io.EOF
 	}
 	return
 }
 
-// NewStringReader creates a custom implementation of strings.NewReader
-func NewStringReader(str string) io.Reader {
-	return &StringReader{str: str}
+// StringReader creates an instance of stringReader
+func StringReader(str string) io.Reader {
+	return &stringReader{str: str}
 }
 
 // main is the entry point of the program
@@ -41,7 +41,7 @@ func main() {
 	}
 
 	// Create the string reader
-	reader := NewStringReader(string(text))
+	reader := StringReader(string(text))
 
 	// Parse the HTML docuent
 	doc, err := html.Parse(reader)
