@@ -9,4 +9,4 @@ build:
 	go install $(MODULE_NAME)/limitreader
 
 clean:
-	rm -f ${GOPATH}/bin/limoitreader
+	rm -f ${GOPATH}/bin/limitreader
