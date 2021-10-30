@@ -9,4 +9,4 @@ build:
 	go install $(MODULE_NAME)/tempflag
 
 clean:
-	rm -f ${GOPATH}/bin/temflag
+	rm -f ${GOPATH}/bin/tempflag
