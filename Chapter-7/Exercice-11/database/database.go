@@ -12,6 +12,7 @@ import (
 // main is the entry point of the program
 func main() {
 	var db database
+	db.items = make(map[string]dollars)
 	db.items["shoes"] = 50
 	db.items["socks"] = 5
 	http.HandleFunc("/list", db.list)
