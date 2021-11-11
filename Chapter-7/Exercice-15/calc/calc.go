@@ -1,4 +1,4 @@
-// The surface program plots the 3-D surface of a user-provided function.
+// calc is a calculator in console mode
 package main
 
 import (
