@@ -1,13 +1,4 @@
-// Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
-// License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-
-// See page 243.
-
-// Crawl3 crawls web links starting with the command-line arguments.
-//
-// This version uses bounded parallelism.
-// For simplicity, it does not address the termination problem.
-//
+// crawl crawls web links starting with the command-line arguments.
 package main
 
 import (
