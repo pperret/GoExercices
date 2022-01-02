@@ -78,8 +78,6 @@ func clientWriter(conn net.Conn, ch <-chan string) {
 	}
 }
 
-//!-handleConn
-
 // main is the entry point of the program
 func main() {
 	listener, err := net.Listen("tcp", "localhost:8000")
