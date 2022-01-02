@@ -48,8 +48,6 @@ func broadcaster() {
 	}
 }
 
-//!-broadcaster
-
 // handleConn manages a connection with a user
 func handleConn(conn net.Conn) {
 	ch := make(chan string) // outgoing client messages
