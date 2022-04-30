@@ -6,7 +6,7 @@ endif
 
 build:
 	go mod tidy
-	go install $(MODULE_NAME)/jpeg
+	go install $(MODULE_NAME)/imgconv
 
 clean:
-	rm -f ${GOPATH}/bin/jpeg
+	rm -f ${GOPATH}/bin/imgconv
