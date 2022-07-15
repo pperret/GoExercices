@@ -1,7 +1,5 @@
 // Package popcount implements several versions of bits counting in an integer
-package main
-
-import "fmt"
+package popcount
 
 // pc[i] is the population count of i.
 var pc [256]byte
@@ -43,10 +41,4 @@ func PopCount3(x uint64) int {
 		x &= (x - 1)
 	}
 	return n
-}
-
-func main() {
-	fmt.Printf("PopCount1 -> %d\n", PopCount1(0))
-	fmt.Printf("PopCount1 -> %d\n", PopCount2(0))
-	fmt.Printf("PopCount1 -> %d\n", PopCount3(0))
 }

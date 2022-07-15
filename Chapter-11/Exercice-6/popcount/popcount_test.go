@@ -1,7 +1,7 @@
 // Bench the several implementations of bits counting in an integer
 // On my platform (darwin [MacOS] with Intel(R) Core(TM) i9-9980HK CPU @ 2.40GHz)
 // PopCount1 is faster than PopCount3 when the bit count is greater than or equal to 4
-package main
+package popcount
 
 import (
 	"flag"
