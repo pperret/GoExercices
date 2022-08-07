@@ -80,7 +80,7 @@ func encode(buf *bytes.Buffer, v reflect.Value, indentation int) error {
 		}
 		buf.WriteByte(')')
 
-	default: // chan, func
+	default: // float, complex, bool, chan, func, interface
 		return fmt.Errorf("unsupported type: %s", v.Type())
 	}
 	return nil
