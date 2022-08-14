@@ -5,8 +5,6 @@ $(error GOPATH is not set)
 endif
 
 build:
-	go mod tidy
-	go install $(MODULE_NAME)/split
 
 test:
 	go mod tidy

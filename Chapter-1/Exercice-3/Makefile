@@ -4,6 +4,10 @@ ifndef GOPATH
 $(error GOPATH is not set)
 endif
 
+build:
+	go mod tidy
+	go install $(MODULE_NAME)/echo
+	
 test:
 	go mod tidy
 	go test -bench=. $(MODULE_NAME)/echo -args tutu tata titi

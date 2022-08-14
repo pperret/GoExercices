@@ -4,6 +4,8 @@ ifndef GOPATH
 $(error GOPATH is not set)
 endif
 
+build:
+
 test:
 	go mod tidy
 	go test -bench=. $(MODULE_NAME)/popcount
