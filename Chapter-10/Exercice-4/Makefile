@@ -9,7 +9,7 @@ build:
 	go install $(MODULE_NAME)/depends
 
 	go mod download golang.org/x/sys
-	go mod download golang.org/x/tools
+	go mod download golang.org/x/net
 	go mod download golang.org/x/term
 	go mod download golang.org/x/text
 
